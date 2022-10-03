@@ -11,7 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'; // installed pac
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; // installed package
 
 // Import Screen ----------
-import { WelcomeScreen, SignupScreen, SigninScreen, HomeScreen } from "./src/screens"
+import { WelcomeScreen, SignupScreen, SigninScreen, HomeScreen, UserWelcomeScreen, TrainerWelcomeScreen, UserSignupScreen } from "./src/screens"
 import { SignoutButton, BottomPopup } from './components/SignoutButton'
 
 // Create stack navigator ----------
@@ -30,10 +30,27 @@ const db = getFirestore( FBapp )  // initialize Firestore
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator name="WelcomeScreen" options={{
+      <Stack.Navigator>
+        <Stack.Screen name="WelcomeScreen" options={{
           headerTitle: "Welcome!",
           headerTitleAlign: "center",
           }} component={WelcomeScreen}>
+        </Stack.Screen>
+        <Stack.Screen name="UserWelcomeScreen" options={{
+          headerTitle: "User Login",
+          headerTitleAlign: "center",
+          }} component={UserWelcomeScreen}>
+        </Stack.Screen>
+        <Stack.Screen name="UserSignupScreen" options={{
+          headerTitle: "Create an account",
+          headerTitleAlign: "center",
+          }} component={UserSignupScreen}>
+        </Stack.Screen>
+        <Stack.Screen name="TrainerWelcomeScreen" options={{
+          headerTitle: "Trainer Login",
+          headerTitleAlign: "center",
+          }} component={TrainerWelcomeScreen}>
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

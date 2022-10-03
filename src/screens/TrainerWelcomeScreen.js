@@ -1,26 +1,25 @@
-import { Text, Image, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
-import React from 'react'
 
-export default function WelcomeScreen() {
+export default function TrainerWelcomeScreen() {
     
     // Set navigation ----------
     const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
-            <View style={styles.containerLogo}>
-                <Image source={ require('../../assets/myfitmateLogo.png') }  style={styles.logo}/>
+            <View>
+                <Text style={styles.h1}>Trainer Login</Text>
             </View>
-            <TouchableOpacity onPress={ () => navigation.navigate("UserWelcomeScreen") }>
-                <Text style={[styles.button, styles.buttonForUser]}>For Users</Text>
+            {/* <TouchableOpacity onPress={ () => navigation.navigate("SignupScreen") }>
+                <Text style={[styles.button, styles.buttonSingup]}>Sign up</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => navigation.navigate("TrainerWelcomeScreen") }>
-                <Text style={[styles.button, styles.buttonForTrainer]}>For Trainers</Text>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={ () => navigation.navigate("SigninScreen") }>
+                <Text style={[styles.button, styles.buttonSingin]}>Sign in</Text>
+            </TouchableOpacity> */}
         </View>
     );
 }
@@ -48,23 +47,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: SIZES.padding*2,
         margin: SIZES.padding,
-        borderRadius: 10,
     },
-    buttonForUser: {
+    buttonSingup: {
         backgroundColor: COLORS.orange,
     },
-    buttonForTrainer: {
+    buttonSingin: {
         backgroundColor: COLORS.blue,
-    },    
-    containerLogo: {
-        width: '100%',
-        alignItems: 'center',
-    },
-    logo: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        resizeMode: 'contain',
-        maxWidth: 300, 
-    },
+    }
 
 });

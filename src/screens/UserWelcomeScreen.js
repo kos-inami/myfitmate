@@ -1,11 +1,10 @@
-import { Text, Image, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
+import { Text, TextInput, Image, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
-import React from 'react'
 
-export default function WelcomeScreen() {
+export default function UserWelcomeScreen() {
     
     // Set navigation ----------
     const navigation = useNavigation()
@@ -13,13 +12,16 @@ export default function WelcomeScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.containerLogo}>
-                <Image source={ require('../../assets/myfitmateLogo.png') }  style={styles.logo}/>
+                <View style={styles.containerLogo}>
+                    <Image source={ require('../../assets/myfitmateLogo.png') }  style={styles.logo}/>
+                    <Text style={styles.h1}>User Login</Text>
+                </View>
             </View>
-            <TouchableOpacity onPress={ () => navigation.navigate("UserWelcomeScreen") }>
-                <Text style={[styles.button, styles.buttonForUser]}>For Users</Text>
+            <TouchableOpacity onPress={ () => navigation.navigate("UserSigninScreen") }>
+                <Text style={[styles.button, styles.buttonLogin]}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => navigation.navigate("TrainerWelcomeScreen") }>
-                <Text style={[styles.button, styles.buttonForTrainer]}>For Trainers</Text>
+            <TouchableOpacity onPress={ () => navigation.navigate("UserSignupScreen") }>
+                <Text style={[styles.button, styles.buttonNewAccount]}>Create an account</Text>
             </TouchableOpacity>
         </View>
     );
@@ -39,23 +41,25 @@ const styles = StyleSheet.create({
     },
     h1: {
         ...FONTS.h1,
-        padding:SIZES.padding*2,
+        padding:SIZES.padding,
         textAlign: 'center',
     },
     button: {
         ...FONTS.p1,
         color: COLORS.white,
         textAlign: 'center',
-        padding: SIZES.padding*2,
+        padding: SIZES.padding,
         margin: SIZES.padding,
         borderRadius: 10,
     },
-    buttonForUser: {
+    buttonLogin: {
         backgroundColor: COLORS.orange,
     },
-    buttonForTrainer: {
-        backgroundColor: COLORS.blue,
-    },    
+    buttonNewAccount: {
+        borderWidth: 2,
+        borderColor: COLORS.orange,
+        color: COLORS.orange,
+    },
     containerLogo: {
         width: '100%',
         alignItems: 'center',
