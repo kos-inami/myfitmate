@@ -35,4 +35,9 @@ const SHADOW = {
     shadowOpacity: 0.25,
 }
 
-export { COLORS, SIZES, FONTS, SHADOW }
+const LINE = {
+    line1: {backgroundColor:'#eee', height: 2, marginTop: 20, marginBottom: 20,},
+    line2: {fontSize: SIZES.p, fontWeight: 'bold'},
+}
+
+export { COLORS, SIZES, FONTS, SHADOW, LINE }
