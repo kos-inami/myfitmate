@@ -82,9 +82,9 @@ export default function UserSignupScreen( props ) {
     const dataGoal = [
         {key:'1',value:'Weight loss'},
         {key:'2',value:'Build muscle'},
-        {key:'2',value:'Keep healthy'},
-        {key:'3',value:'Strength'},
-        {key:'3',value:'Shred'},
+        {key:'3',value:'Keep healthy'},
+        {key:'4',value:'Strength'},
+        {key:'5',value:'Shred'},
     ]
 
     const [details, setDetails] = useState('')
@@ -112,9 +112,35 @@ export default function UserSignupScreen( props ) {
         }
     }
 
-    const signUp = ( email, password ) => {
-        console.log('signing up...')
-        props.signup( email, password )
+    const signUp = ( 
+        email, 
+        password,
+        firstName, 
+        lastName, 
+        phone, 
+        locationSelected, 
+        genderSelected, 
+        ageSelected, 
+        trainerGenderSelected, 
+        regimeSelected, 
+        goalSelected, 
+        details
+    ) => {
+        console.log("sign up...")
+        props.signup( 
+            email, 
+            password, 
+            firstName, 
+            lastName, 
+            phone,
+            locationSelected, 
+            genderSelected, 
+            ageSelected, 
+            trainerGenderSelected, 
+            regimeSelected, 
+            goalSelected, 
+            details
+        )
     }
 
     useEffect (() => {
@@ -147,7 +173,8 @@ export default function UserSignupScreen( props ) {
                     {/* Section 1  */}
 
                     <Text style={styles.label}>Location (*Regions of Sydney)</Text>
-                        <SelectList style={styles.input} setSelected={setLocationSelected} data={dataLocation} onSelect={(selected) => setLocationSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
+                        <Text>location: {locationSelected}</Text>
 
                     <Text style={styles.label}>First name</Text>
                         <TextInput style={styles.input} onChangeText={ (value) => setFirstName(value) }/>
@@ -169,19 +196,19 @@ export default function UserSignupScreen( props ) {
                     <Text style={styles.title}>Details</Text>
 
                     <Text style={styles.label}>Gender</Text>
-                        <SelectList style={styles.input} setSelected={setGenderSelected} data={dataGender} onSelect={(selected) => setGenderSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} />
 
                     <Text style={styles.label}>Age</Text>
-                        <SelectList style={styles.input} setSelected={setAgeSelected} data={dataAge} onSelect={(selected) => setAgeSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} />
 
                     <Text style={styles.label}>Preference for the gender of the trainer</Text>
-                        <SelectList style={styles.input} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onSelect={(selected) => setTrainerGenderSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onChangeText={(selected) => setTrainerGenderSelected(selected)} />
 
                     <Text style={styles.label}>Describe your current exercise regime</Text>
-                        <SelectList style={styles.input} setSelected={setRegimeSelected} data={dataRegime} onSelect={(selected) => setRegimeSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setRegimeSelected} data={dataRegime} onChangeText={(selected) => setRegimeSelected(selected)} />
 
                     <Text style={styles.label}>Goal</Text>
-                        <SelectList style={styles.input} setSelected={setGoalSelected} data={dataGoal} onSelect={(selected) => setGoalSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setGoalSelected} data={dataGoal} onChangeText={(selected) => setGoalSelected(selected)} />
 
                     <Text style={styles.label}>Additional details</Text>
                     <TextInput
@@ -197,9 +224,22 @@ export default function UserSignupScreen( props ) {
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signUp(email, password) }}
+                        onPress={ () => { signUp(
+                            email, 
+                            password, 
+                            firstName, 
+                            lastName, 
+                            phone, 
+                            locationSelected, 
+                            genderSelected, 
+                            ageSelected, 
+                            trainerGenderSelected, 
+                            regimeSelected, 
+                            goalSelected, 
+                            details
+                            ) }}
                     >
-                        <Text style={styles.buttonText}>Submit</Text>
+                        <Text style={styles.buttonText}>Create</Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity onPress={ () => navigation.navigate("SigninScreen") }>

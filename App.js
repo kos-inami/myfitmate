@@ -28,6 +28,38 @@ const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and sto
 const db = getFirestore( FBapp )  // initialize Firestore
 
 export default function App() {
+
+  const [ user, setUser ] = useState()
+
+  // State to set data
+  const [appData, setAppData] = useState()
+
+  const authObj = getAuth()
+  onAuthStateChanged( authObj, (user) => {
+    if(user) {
+      setUser( user )
+      // when auth get data ---------
+      if(!appData) {
+        getData(`user/${user.uid}/profile`)
+      }
+    }
+    else {
+      setUser( null )
+    }
+  })
+
+  const register = (email, password) => {
+    console.log("register: " + email, password)
+    createUserWithEmailAndPassword(authObj, email, password)
+      .then((userCredential) => {
+        setUser(userCredential.user)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -44,7 +76,8 @@ export default function App() {
         <Stack.Screen name="UserSignupScreen" options={{
           headerTitle: "Create an account",
           headerTitleAlign: "center",
-          }} component={UserSignupScreen}>
+          }}>
+          { ( props ) => <UserSignupScreen {...props} signup={register} auth={user} /> }
         </Stack.Screen>
         <Stack.Screen name="TrainerWelcomeScreen" options={{
           headerTitle: "Trainer Login",
