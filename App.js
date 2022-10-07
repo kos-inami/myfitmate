@@ -11,8 +11,8 @@ import { NavigationContainer } from '@react-navigation/native'; // installed pac
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; // installed package
 
 // Import Screen ----------
-import { WelcomeScreen, SignupScreen, SigninScreen, HomeScreen, UserWelcomeScreen, TrainerWelcomeScreen, UserSignupScreen } from "./src/screens"
-import { SignoutButton, BottomPopup } from './components/SignoutButton'
+import { WelcomeScreen, SignupScreen, SigninScreen, HomeScreen, UserWelcomeScreen, TrainerWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen } from "./src/screens"
+import { SignoutButton } from './components/SignoutButton'
 
 // Create stack navigator ----------
 const Stack = createNativeStackNavigator()
@@ -45,9 +45,16 @@ export default function App() {
     }
     else {
       setUser( null )
+      // Alert.alert(
+      //   "This email is already used.",
+      //   [
+      //     { text: "OK", onPress: () => console.log("OK Pressed") }
+      //   ]
+      // )
     }
   })
 
+  // Create account: Add email and password into firebase auth ---------
   const register = (email, password) => {
     console.log("register: " + email, password)
     createUserWithEmailAndPassword(authObj, email, password)
@@ -59,32 +66,77 @@ export default function App() {
       })
   }
 
+  // Create account: Add profile date into firebase ---------
+  const addData = async (FScollection, data) => {
+    // add data to a collection with FS generated id
+    const ref = await addDoc( collection(db, FScollection), data )
+    console.log(ref.id);
+  }
+
+  // Sign Out -----------
+  const signout = () => {
+    signOut( authObj )
+    .then( () => {
+      // sign out successful
+      console.log("sign out...");
+    })
+    .catch( () => {
+      // sign out errors
+      console.log("sign out fail...");
+    })
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        
         <Stack.Screen name="WelcomeScreen" options={{
           headerTitle: "Welcome!",
           headerTitleAlign: "center",
           }} component={WelcomeScreen}>
         </Stack.Screen>
+
         <Stack.Screen name="UserWelcomeScreen" options={{
           headerTitle: "User Login",
           headerTitleAlign: "center",
           }} component={UserWelcomeScreen}>
         </Stack.Screen>
+        
         <Stack.Screen name="UserSignupScreen" options={{
           headerTitle: "Create an account",
           headerTitleAlign: "center",
           }}>
           { ( props ) => <UserSignupScreen {...props} signup={register} auth={user} /> }
         </Stack.Screen>
+        
+        <Stack.Screen name="UserSignupProfScreen" options={{
+          headerTitle: "Profile",
+          headerTitleAlign: "center",
+          }}>
+          { ( props ) => <UserSignupProfScreen {...props} add={addData} auth={user} data={appData} /> }
+        </Stack.Screen>
+        
+        <Stack.Screen name="UserSigninScreen" options={{
+          headerTitle: "User Signin",
+          headerTitleAlign: "center",
+          }} component={UserSigninScreen}>
+        </Stack.Screen>
+        
+        <Stack.Screen name="HomeScreen" options={{
+          headerTitle: "Search Trainer",
+          headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
+          }}>
+          { ( props ) => <HomeScreen {...props} auth={user} /> }
+        </Stack.Screen>
+
         <Stack.Screen name="TrainerWelcomeScreen" options={{
           headerTitle: "Trainer Login",
           headerTitleAlign: "center",
           }} component={TrainerWelcomeScreen}>
         </Stack.Screen>
       </Stack.Navigator>
+  
     </NavigationContainer>
   );
 }
