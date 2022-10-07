@@ -1,4 +1,4 @@
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView, Alert } from 'react-native'
 import { React, useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -66,12 +66,12 @@ export default function UserSignupScreen( props ) {
         }
     }, [email, password])
 
-    // useEffect (() => {
-    //     if (props.auth) {
-    //         // navigation.navigate("Home")
-    //         navigation.reset( {index: 0, routes: [{name: "UserSignupProfScreen"}]})
-    //     }
-    // }, [props.auth])
+    useEffect (() => {
+        if (props.auth) {
+            navigation.navigate("UserSignupProfScreen") 
+            // navigation.reset( {index: 0, routes: [{name: "UserSignupProfScreen"}]})
+        }
+    }, [props.auth])
 
     return (
         
@@ -89,7 +89,7 @@ export default function UserSignupScreen( props ) {
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signUp(email, password,), navigation.navigate("UserSignupProfScreen") }}
+                        onPress={ () => { signUp(email, password,)}}
                     >
                         <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>

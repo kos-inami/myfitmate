@@ -41,12 +41,12 @@ export default function UserSigninScreen( props ) {
         }
     }
 
-    const signUp = ( 
+    const signIn = ( 
         email, 
         password
     ) => {
-        console.log("sign up...")
-        props.signup( 
+        console.log("sign in...")
+        props.signin( 
             email, 
             password
         )
@@ -68,7 +68,7 @@ export default function UserSigninScreen( props ) {
 
     useEffect (() => {
         if (props.auth) {
-            // navigation.navigate("Home")
+            
             navigation.reset( {index: 0, routes: [{name: "HomeScreen"}]})
         }
     }, [props.auth])
@@ -89,15 +89,15 @@ export default function UserSigninScreen( props ) {
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signUp(
+                        onPress={ () => { signIn(
                             email, 
                             password,
                             ) }}
                     >
-                        <Text style={styles.buttonText}>Create</Text>
+                        <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={ () => navigation.navigate("UserSigninScreen") }>
+                    <TouchableOpacity onPress={ () => navigation.navigate("UserSignupScreen") }>
                         <Text style={{...FONTS.p2}}>Do you NOT have an account?</Text>
                     </TouchableOpacity>
                 </View>

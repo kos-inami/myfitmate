@@ -83,33 +83,6 @@ export default function UserSignupProfScreen( props ) {
 
     const [details, setDetails] = useState('')
 
-    // const saveProf = (
-    //     firstName, 
-    //     lastName, 
-    //     phone, 
-    //     locationSelected, 
-    //     genderSelected, 
-    //     ageSelected, 
-    //     trainerGenderSelected, 
-    //     regimeSelected, 
-    //     goalSelected, 
-    //     details
-    // ) => {
-    //     console.log("sign up...")
-    //     props.saveProf( 
-    //         firstName, 
-    //         lastName, 
-    //         phone,
-    //         locationSelected, 
-    //         genderSelected, 
-    //         ageSelected, 
-    //         trainerGenderSelected, 
-    //         regimeSelected, 
-    //         goalSelected, 
-    //         details
-    //     )
-    // }
-
     // Add user profile ---------
     const [input, setInput] = useState("")
     const saveProf = (
@@ -141,13 +114,6 @@ export default function UserSignupProfScreen( props ) {
 
         navigation.reset( {index: 0, routes: [{name: "HomeScreen"}]})
     }
-
-    // useEffect (() => {
-    //     if (props.auth) {
-    //         // navigation.navigate("Home")
-    //         navigation.reset( {index: 0, routes: [{name: "HomeScreen"}]})
-    //     }
-    // }, [props.auth])
 
     return (
         

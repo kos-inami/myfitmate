@@ -45,12 +45,6 @@ export default function App() {
     }
     else {
       setUser( null )
-      // Alert.alert(
-      //   "This email is already used.",
-      //   [
-      //     { text: "OK", onPress: () => console.log("OK Pressed") }
-      //   ]
-      // )
     }
   })
 
@@ -73,8 +67,25 @@ export default function App() {
     console.log(ref.id);
   }
 
+  // User: Sign in ---------
+  const signin = ( email, password) => {
+    signInWithEmailAndPassword(authObj, email, password )
+      .then((userCredential) => setUser(userCredential.user) )
+      .catch((error) => {
+        console.log(error)
+        Alert.alert(
+          "Email or password are wrong.",
+          "Please try again!",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ])
+      })
+  }
+
   // Sign Out -----------
   const signout = () => {
+  //   const authObj = getAuth()
+  //   authObj.signOut()
     signOut( authObj )
     .then( () => {
       // sign out successful
@@ -101,7 +112,7 @@ export default function App() {
           headerTitleAlign: "center",
           }} component={UserWelcomeScreen}>
         </Stack.Screen>
-        
+
         <Stack.Screen name="UserSignupScreen" options={{
           headerTitle: "Create an account",
           headerTitleAlign: "center",
@@ -115,13 +126,14 @@ export default function App() {
           }}>
           { ( props ) => <UserSignupProfScreen {...props} add={addData} auth={user} data={appData} /> }
         </Stack.Screen>
-        
+
         <Stack.Screen name="UserSigninScreen" options={{
           headerTitle: "User Signin",
           headerTitleAlign: "center",
-          }} component={UserSigninScreen}>
+          }}>
+          { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} /> }
         </Stack.Screen>
-        
+
         <Stack.Screen name="HomeScreen" options={{
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
