@@ -67,9 +67,16 @@ export default function UserSigninScreen( props ) {
     }, [email, password])
 
     useEffect (() => {
+
         if (props.auth) {
-            
-            navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
+            console.log("id: " + props.auth.uid);
+            console.log("data: " + props.appData);
+            if (props.appData == "no") {
+                console.log("yes");
+            } else {
+                console.log("no");
+                // navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
+            }
         }
     }, [props.auth])
 

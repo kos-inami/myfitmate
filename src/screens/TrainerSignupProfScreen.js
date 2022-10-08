@@ -1,6 +1,6 @@
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
 import { React, useState, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
 
@@ -15,6 +15,10 @@ export default function TrainerSignupProfScreen( props ) {
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+
+    const route = useRoute();
+    const { email } = route.params
+
     const [phone, setPhone] = useState('')
 
     const [locationSelected, setLocationSelected] = useState('')
@@ -88,7 +92,8 @@ export default function TrainerSignupProfScreen( props ) {
     const saveProf = (
         path, 
         firstName, 
-        lastName, 
+        lastName,
+        email, 
         phone, 
         locationSelected, 
         genderSelected, 
@@ -101,6 +106,7 @@ export default function TrainerSignupProfScreen( props ) {
         const dataObj = {
             firstName: firstName, 
             lastName: lastName, 
+            email: email,
             phone: phone, 
             locationSelected: locationSelected, 
             genderSelected: genderSelected, 
@@ -174,6 +180,7 @@ export default function TrainerSignupProfScreen( props ) {
                             `trainer/${props.auth.uid}/profile`, 
                             firstName, 
                             lastName, 
+                            email,
                             phone, 
                             locationSelected, 
                             genderSelected, 

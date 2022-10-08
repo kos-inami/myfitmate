@@ -68,7 +68,9 @@ export default function UserSignupScreen( props ) {
 
     useEffect (() => {
         if (props.auth) {
-            navigation.navigate("UserSignupProfScreen") 
+            navigation.navigate("UserSignupProfScreen",  {
+                email,
+            }) 
             // navigation.reset( {index: 0, routes: [{name: "UserSignupProfScreen"}]})
         }
     }, [props.auth])

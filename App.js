@@ -26,7 +26,7 @@ const Stack = createNativeStackNavigator()
 import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc } from "firebase/firestore"
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref } from "firebase/firestore"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
@@ -43,10 +43,13 @@ export default function App() {
   onAuthStateChanged( authObj, (user) => {
     if(user) {
       setUser( user )
-      // // when auth get data ---------
-      // if(!appData) {
-      //   getData(`user/${user.uid}/profile`)
-      // }
+
+      console.log("here in Auth");
+      // when auth get data ---------
+      if(!appData) {
+        getData(`user`)
+      }
+
     }
     else {
       setUser( null )
@@ -81,8 +84,14 @@ export default function App() {
 
   // User: Sign in ---------
   const signin = ( email, password) => {
+
+    // console.log("id: " + user.uid)
+    console.log("here in singin");
+
     signInWithEmailAndPassword(authObj, email, password )
-      .then((userCredential) => setUser(userCredential.user) )
+      .then(
+        (userCredential) => setUser(userCredential.user)
+      )
       .catch((error) => {
         console.log(error)
         Alert.alert(
@@ -92,6 +101,22 @@ export default function App() {
             { text: "OK", onPress: () => console.log("OK Pressed") }
           ])
       })
+  }
+
+  // Get data to display ----------
+  const getData = ( FScollection ) => {
+    const FSquery = query( collection(db, FScollection) )
+    const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+      console.log("Start to get data");
+      let FSdata = []
+      querySnapshot.forEach((doc) => {
+        let item = {}
+        item = doc.data()
+        item.id = doc.id
+        FSdata.push( item )
+      })
+        setAppData( FSdata )
+    })
   }
 
   // Sign Out -----------
@@ -108,6 +133,9 @@ export default function App() {
       console.log("sign out fail...");
     })
   }
+
+
+
 
   return (
     <NavigationContainer>
@@ -142,8 +170,9 @@ export default function App() {
         <Stack.Screen name="UserSigninScreen" options={{
           headerTitle: "User Signin",
           headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} /> }
+        { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} /> }
         </Stack.Screen>
 
         <Stack.Screen name="UserHomeScreen" options={{

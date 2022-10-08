@@ -1,6 +1,6 @@
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
 import { React, useState, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
 
@@ -15,6 +15,10 @@ export default function UserSignupProfScreen( props ) {
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
+
+    const route = useRoute();
+    const { email } = route.params
+
     const [phone, setPhone] = useState('')
 
     const [locationSelected, setLocationSelected] = useState('')
@@ -88,7 +92,8 @@ export default function UserSignupProfScreen( props ) {
     const saveProf = (
         path, 
         firstName, 
-        lastName, 
+        lastName,
+        email,
         phone, 
         locationSelected, 
         genderSelected, 
@@ -100,7 +105,8 @@ export default function UserSignupProfScreen( props ) {
         ) => {
         const dataObj = {
             firstName: firstName, 
-            lastName: lastName, 
+            lastName: lastName,
+            email: email, 
             phone: phone, 
             locationSelected: locationSelected, 
             genderSelected: genderSelected, 
@@ -115,6 +121,7 @@ export default function UserSignupProfScreen( props ) {
         navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
     }
 
+
     return (
         
         <KeyboardAvoidingView style={styles.signupView} behavior='padding'>
@@ -122,6 +129,7 @@ export default function UserSignupProfScreen( props ) {
                 <View style={styles.signupForm}>
 
                     <Text style={styles.label}>Please fill out the form below to help us to find a Pearsonal Trainer for you.</Text>
+                    {/* <Text>{email}</Text> */}
 
                     <View style={LINE.line1} />
 
@@ -174,6 +182,7 @@ export default function UserSignupProfScreen( props ) {
                             `user/${props.auth.uid}/profile`, 
                             firstName, 
                             lastName, 
+                            email,
                             phone, 
                             locationSelected, 
                             genderSelected, 
