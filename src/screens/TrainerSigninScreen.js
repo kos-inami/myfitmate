@@ -8,7 +8,7 @@ import SelectList from 'react-native-dropdown-select-list'
 import { COLORS, SIZES, FONTS, SHADOW, LINE } from "../designSet"
 
 
-export default function UserSigninScreen( props ) {
+export default function TrainerSigninScreen( props ) {
     
     // Set navigation ----------
     const navigation = useNavigation()
@@ -69,7 +69,7 @@ export default function UserSigninScreen( props ) {
     useEffect (() => {
         if (props.auth) {
             
-            navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
+            navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
         }
     }, [props.auth])
 
@@ -97,7 +97,7 @@ export default function UserSigninScreen( props ) {
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={ () => navigation.navigate("UserSignupScreen") }>
+                    <TouchableOpacity onPress={ () => navigation.navigate("TrainerSignupScreen") }>
                         <Text style={{...FONTS.p2}}>Do you NOT have an account?</Text>
                     </TouchableOpacity>
                 </View>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     input: {
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     },
     inputTextArea: {
         textAlignVertical: 'top',
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     button: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.blue,
         padding: 10,
         marginTop: 10,
         marginBottom: 30,

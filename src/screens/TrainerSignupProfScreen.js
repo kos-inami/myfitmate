@@ -8,7 +8,7 @@ import SelectList from 'react-native-dropdown-select-list'
 import { COLORS, SIZES, FONTS, SHADOW, LINE } from "../designSet"
 
 
-export default function UserSignupProfScreen( props ) {
+export default function TrainerSignupProfScreen( props ) {
 
     // Set navigation ----------
     const navigation = useNavigation()
@@ -112,7 +112,7 @@ export default function UserSignupProfScreen( props ) {
         }
         props.add( path, dataObj )
 
-        navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
+        navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
     }
 
     return (
@@ -121,7 +121,7 @@ export default function UserSignupProfScreen( props ) {
             <ScrollView style={styles.container}>
                 <View style={styles.signupForm}>
 
-                    <Text style={styles.label}>Please fill out the form below to help us to find a Pearsonal Trainer for you.</Text>
+                    <Text style={styles.label}>Please fill out to let us know about you.</Text>
 
                     <View style={LINE.line1} />
 
@@ -171,7 +171,7 @@ export default function UserSignupProfScreen( props ) {
                     <TouchableOpacity 
                         style={ styles.button }
                         onPress={ () => { saveProf(
-                            `user/${props.auth.uid}/profile`, 
+                            `trainer/${props.auth.uid}/profile`, 
                             firstName, 
                             lastName, 
                             phone, 
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     input: {
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     },
     inputTextArea: {
         textAlignVertical: 'top',
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     button: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.blue,
         padding: 10,
         marginTop: 10,
         marginBottom: 30,

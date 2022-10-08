@@ -11,7 +11,12 @@ import { NavigationContainer } from '@react-navigation/native'; // installed pac
 import { createNativeStackNavigator } from '@react-navigation/native-stack'; // installed package
 
 // Import Screen ----------
-import { WelcomeScreen, SignupScreen, SigninScreen, HomeScreen, UserWelcomeScreen, TrainerWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen } from "./src/screens"
+import { 
+  WelcomeScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen,
+  TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
+} from "./src/screens"
+
 import { SignoutButton } from './components/SignoutButton'
 
 // Create stack navigator ----------
@@ -38,10 +43,10 @@ export default function App() {
   onAuthStateChanged( authObj, (user) => {
     if(user) {
       setUser( user )
-      // when auth get data ---------
-      if(!appData) {
-        getData(`user/${user.uid}/profile`)
-      }
+      // // when auth get data ---------
+      // if(!appData) {
+      //   getData(`user/${user.uid}/profile`)
+      // }
     }
     else {
       setUser( null )
@@ -62,6 +67,13 @@ export default function App() {
 
   // Create account: Add profile date into firebase ---------
   const addData = async (FScollection, data) => {
+    // add data to a collection with FS generated id
+    const ref = await addDoc( collection(db, FScollection), data )
+    console.log(ref.id);
+  }
+
+  // Create account: Add profile date into firebase ---------
+  const addTrainerData = async (FScollection, data) => {
     // add data to a collection with FS generated id
     const ref = await addDoc( collection(db, FScollection), data )
     console.log(ref.id);
@@ -114,7 +126,7 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen name="UserSignupScreen" options={{
-          headerTitle: "Create an account",
+          headerTitle: "Create a user account",
           headerTitleAlign: "center",
           }}>
           { ( props ) => <UserSignupScreen {...props} signup={register} auth={user} /> }
@@ -134,12 +146,12 @@ export default function App() {
           { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} /> }
         </Stack.Screen>
 
-        <Stack.Screen name="HomeScreen" options={{
+        <Stack.Screen name="UserHomeScreen" options={{
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <HomeScreen {...props} auth={user} /> }
+          { ( props ) => <UserHomeScreen {...props} auth={user} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerWelcomeScreen" options={{
@@ -147,8 +159,37 @@ export default function App() {
           headerTitleAlign: "center",
           }} component={TrainerWelcomeScreen}>
         </Stack.Screen>
+
+        <Stack.Screen name="TrainerSignupScreen" options={{
+          headerTitle: "Create a trainer account",
+          headerTitleAlign: "center",
+          }}>
+          { ( props ) => <TrainerSignupScreen {...props} signup={register} auth={user} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="TrainerSignupProfScreen" options={{
+          headerTitle: "Profile",
+          headerTitleAlign: "center",
+          }}>
+          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} auth={user} data={appData} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="TrainerSigninScreen" options={{
+          headerTitle: "Trainer Signin",
+          headerTitleAlign: "center",
+          }}>
+          { ( props ) => <TrainerSigninScreen {...props} signin={signin} auth={user} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="TrainerHomeScreen" options={{
+          headerTitle: "Trainer Home",
+          headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
+          }}>
+          { ( props ) => <TrainerHomeScreen {...props} auth={user} /> }
+        </Stack.Screen>
+
       </Stack.Navigator>
-  
     </NavigationContainer>
   );
 }

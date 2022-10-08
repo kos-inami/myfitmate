@@ -1,4 +1,4 @@
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
+import { Text, Image, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 // Design set ----------
@@ -11,18 +11,22 @@ export default function TrainerWelcomeScreen() {
 
     return (
         <View style={styles.container}>
-            <View>
-                <Text style={styles.h1}>Trainer Login</Text>
+            <View style={styles.containerLogo}>
+                <View style={styles.containerLogo}>
+                    <Image source={ require('../../assets/myfitmateLogo.png') }  style={styles.logo}/>
+                    <Text style={styles.h1}>Trainer Login</Text>
+                </View>
             </View>
-            {/* <TouchableOpacity onPress={ () => navigation.navigate("SignupScreen") }>
-                <Text style={[styles.button, styles.buttonSingup]}>Sign up</Text>
+            <TouchableOpacity onPress={ () => navigation.navigate("TrainerSigninScreen") }>
+                <Text style={[styles.button, styles.buttonLogin]}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => navigation.navigate("SigninScreen") }>
-                <Text style={[styles.button, styles.buttonSingin]}>Sign in</Text>
-            </TouchableOpacity> */}
+            <TouchableOpacity onPress={ () => navigation.navigate("TrainerSignupScreen") }>
+                <Text style={[styles.button, styles.buttonNewAccount]}>Create an account</Text>
+            </TouchableOpacity>
         </View>
     );
 }
+
 
 // Styles ===========
 const styles = StyleSheet.create({
@@ -38,21 +42,34 @@ const styles = StyleSheet.create({
     },
     h1: {
         ...FONTS.h1,
-        padding:SIZES.padding*2,
+        padding:SIZES.padding,
         textAlign: 'center',
     },
     button: {
         ...FONTS.p1,
         color: COLORS.white,
         textAlign: 'center',
-        padding: SIZES.padding*2,
+        padding: SIZES.padding,
         margin: SIZES.padding,
+        borderRadius: 10,
     },
-    buttonSingup: {
-        backgroundColor: COLORS.orange,
-    },
-    buttonSingin: {
+    buttonLogin: {
         backgroundColor: COLORS.blue,
-    }
+    },
+    buttonNewAccount: {
+        borderWidth: 2,
+        borderColor: COLORS.blue,
+        color: COLORS.blue,
+    },
+    containerLogo: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    logo: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        resizeMode: 'contain',
+        maxWidth: 300, 
+    },
 
 });

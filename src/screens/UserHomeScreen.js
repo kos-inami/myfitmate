@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
 
-export default function HomeScreen( props ) {
+export default function UserHomeScreen( props ) {
 
     // Set navigation ----------
     const navigation = useNavigation()

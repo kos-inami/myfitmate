@@ -1,4 +1,4 @@
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView, Alert } from 'react-native'
 import { React, useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -8,7 +8,7 @@ import SelectList from 'react-native-dropdown-select-list'
 import { COLORS, SIZES, FONTS, SHADOW, LINE } from "../designSet"
 
 
-export default function UserSigninScreen( props ) {
+export default function TrainerSignupScreen( props ) {
     
     // Set navigation ----------
     const navigation = useNavigation()
@@ -41,12 +41,12 @@ export default function UserSigninScreen( props ) {
         }
     }
 
-    const signIn = ( 
+    const signUp = ( 
         email, 
         password
     ) => {
-        console.log("sign in...")
-        props.signin( 
+        console.log("sign up...")
+        props.signup( 
             email, 
             password
         )
@@ -68,8 +68,8 @@ export default function UserSigninScreen( props ) {
 
     useEffect (() => {
         if (props.auth) {
-            
-            navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
+            navigation.navigate("TrainerSignupProfScreen") 
+            // navigation.reset( {index: 0, routes: [{name: "UserSignupProfScreen"}]})
         }
     }, [props.auth])
 
@@ -82,23 +82,20 @@ export default function UserSigninScreen( props ) {
                     <Text style={styles.label}>Email</Text>
                         <TextInput style={styles.input} onChangeText={ (value) => setEmail(value) }/>
 
-                    <Text style={styles.label}>Password</Text>
+                    <Text style={styles.label}>Password (*It must more than 8 letters.)</Text>
                         <TextInput style={styles.input} secureTextEntry={true} onChangeText={ (value) => setPassword(value) } />
                     
                     {/* Submit button */}
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signIn(
-                            email, 
-                            password,
-                            ) }}
+                        onPress={ () => { signUp(email, password,)}}
                     >
-                        <Text style={styles.buttonText}>Submit</Text>
+                        <Text style={styles.buttonText}>Next</Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={ () => navigation.navigate("UserSignupScreen") }>
-                        <Text style={{...FONTS.p2}}>Do you NOT have an account?</Text>
+                    <TouchableOpacity onPress={ () => navigation.navigate("TrainerSigninScreen") }>
+                        <Text style={{...FONTS.p2}}>Do you already have an account?</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -138,7 +135,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     input: {
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -146,7 +143,7 @@ const styles = StyleSheet.create({
     },
     inputTextArea: {
         textAlignVertical: 'top',
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     button: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.blue,
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
