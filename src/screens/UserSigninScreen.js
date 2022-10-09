@@ -1,4 +1,4 @@
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaVie, Alert } from 'react-native'
 import { React, useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
@@ -70,13 +70,8 @@ export default function UserSigninScreen( props ) {
 
         if (props.auth) {
             console.log("id: " + props.auth.uid);
-            console.log("data: " + props.appData);
-            if (props.appData == "no") {
-                console.log("yes");
-            } else {
-                console.log("no");
-                // navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
-            }
+            console.log("data: " + props.data);
+            navigation.reset( {index: 0, routes: [{name: "UserHomeScreen"}]})
         }
     }, [props.auth])
 

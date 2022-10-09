@@ -47,7 +47,7 @@ export default function App() {
       console.log("here in Auth");
       // when auth get data ---------
       if(!appData) {
-        getData(`user`)
+        getData(`user/${user.uid}/profile`)
       }
 
     }
@@ -83,10 +83,10 @@ export default function App() {
   }
 
   // User: Sign in ---------
-  const signin = ( email, password) => {
+  const signin = ( email, password ) => {
 
     // console.log("id: " + user.uid)
-    console.log("here in singin");
+    console.log("here in singin " + email);
 
     signInWithEmailAndPassword(authObj, email, password )
       .then(
@@ -115,7 +115,8 @@ export default function App() {
         item.id = doc.id
         FSdata.push( item )
       })
-        setAppData( FSdata )
+      console.log(FSdata);
+      setAppData( FSdata )  
     })
   }
 
@@ -123,10 +124,24 @@ export default function App() {
   const signout = () => {
   //   const authObj = getAuth()
   //   authObj.signOut()
+    setAppData("")
     signOut( authObj )
     .then( () => {
       // sign out successful
       console.log("sign out...");
+    })
+    .catch( () => {
+      // sign out errors
+      console.log("sign out fail...");
+    })
+  }
+  // Sign Out to trainer screen -----------
+  const signoutToTrainerScreen = () => {
+    signOut( authObj )
+    .then( () => {
+      // sign out successful
+      console.log("sign out...");
+      na
     })
     .catch( () => {
       // sign out errors
@@ -172,7 +187,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-        { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} /> }
+        { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user}  data={appData} signout={signout} /> }
         </Stack.Screen>
 
         <Stack.Screen name="UserHomeScreen" options={{
@@ -180,7 +195,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <UserHomeScreen {...props} auth={user} /> }
+          { ( props ) => <UserHomeScreen {...props} auth={user} data={appData}  signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerWelcomeScreen" options={{
