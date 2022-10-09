@@ -26,7 +26,7 @@ const Stack = createNativeStackNavigator()
 import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref } from "firebase/firestore"
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, set } from "firebase/firestore"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
@@ -37,7 +37,9 @@ export default function App() {
   const [ user, setUser ] = useState()
 
   // State to set data
-  const [appData, setAppData] = useState()
+  const [appData, setAppData] = useState() // for users data
+  const [appTrainerDataList, setAppTrainerDataList] = useState() // for trainer data in user page
+
 
   const authObj = getAuth()
   onAuthStateChanged( authObj, (user) => {
@@ -79,7 +81,12 @@ export default function App() {
   const addTrainerData = async (FScollection, data) => {
     // add data to a collection with FS generated id
     const ref = await addDoc( collection(db, FScollection), data )
-    console.log(ref.id);
+    // console.log(ref.id);
+  }
+  const addTrainerDataList = async (FScollection, data) => {
+    // add data to a collection with FS generated id
+    const ref = await addDoc( collection(db, FScollection), data )
+    // console.log("email: " + data.email, FScollection);
   }
 
   // User: Sign in ---------
@@ -103,7 +110,7 @@ export default function App() {
       })
   }
 
-  // Get data to display ----------
+  // Get user data to display ----------
   const getData = ( FScollection ) => {
     const FSquery = query( collection(db, FScollection) )
     const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
@@ -119,6 +126,7 @@ export default function App() {
       setAppData( FSdata )  
     })
   }
+
 
   // Sign Out -----------
   const signout = () => {
@@ -187,7 +195,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-        { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user}  data={appData} signout={signout} /> }
+        { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} data={appData} signout={signout} /> }
         </Stack.Screen>
 
         <Stack.Screen name="UserHomeScreen" options={{
@@ -195,7 +203,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <UserHomeScreen {...props} auth={user} data={appData}  signoutToTrainerScreen={signoutToTrainerScreen} /> }
+          { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} trainerData={appTrainerDataList} signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerWelcomeScreen" options={{
@@ -215,7 +223,7 @@ export default function App() {
           headerTitle: "Profile",
           headerTitleAlign: "center",
           }}>
-          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} auth={user} data={appData} /> }
+          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} addProfList={addTrainerDataList} auth={user} data={appData} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerSigninScreen" options={{

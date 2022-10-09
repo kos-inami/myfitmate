@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements'
 
+// Firebase config ---------- // installed package
+import { firebaseConfig } from '../../config/Config'
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, QuerySnapshot, Firestore } from "firebase/firestore"
+
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
 
@@ -10,6 +15,26 @@ export default function UserHomeScreen( props ) {
 
     // Set navigation ----------
     const navigation = useNavigation()
+
+    const [trainers, setTrainers] = useState('')
+    const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
+    const db = getFirestore( FBapp )  // initialize Firestore
+
+    const getTrainerData = () => {
+        const FSquery = query( collection(db, 'trainer') )
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                console.log("id: " + id);
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            console.log("trainers: " + FSdata);
+        })
+    }
 
     const [exist, setExist] = useState('')
 
@@ -27,6 +52,7 @@ export default function UserHomeScreen( props ) {
             setExist(1)
         } else {
             console.log( props.data )
+            getTrainerData()
             setExist(2)
         }
     }, [props.data])
@@ -120,5 +146,9 @@ const styles = StyleSheet.create( {
         ...FONTS.p1,
         color: COLORS.white,
         textAlign: 'center',
+    },
+    borderBottom: {
+        backgroundColor: COLORS.blue,
+        height: 1,
     },
 });

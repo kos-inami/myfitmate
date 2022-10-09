@@ -61,23 +61,15 @@ export default function TrainerSignupProfScreen( props ) {
         {key:'9',value:'60+'},
     ]
 
-    const [trainerGenderSelected, setTrainerGenderSelected] = useState('')
-    const dataTrainerGender = [
+    const [trainGenderSelected, setTrainGenderSelected] = useState('')
+    const dataTrainGender = [
         {key:'1',value:'Male'},
         {key:'2',value:'Female'},
         {key:'3',value:'Does not matter'},
     ]
 
-    const [regimeSelected, setRegimeSelected] = useState('')
-    const dataRegime = [
-        {key:'1',value:'I don’t really do any exercise'},
-        {key:'2',value:'Some times in the month'},
-        {key:'3',value:'A few days in every week'},
-        {key:'4',value:'Very active - more than 4 days per week'},
-    ]
-
-    const [goalSelected, setGoalSelected] = useState('')
-    const dataGoal = [
+    const [proSelected, setProSelected] = useState('')
+    const dataPro = [
         {key:'1',value:'Weight loss'},
         {key:'2',value:'Build muscle'},
         {key:'3',value:'Keep healthy'},
@@ -85,6 +77,7 @@ export default function TrainerSignupProfScreen( props ) {
         {key:'5',value:'Shred'},
     ]
 
+    const [availableDate, setAvailableDate] = useState('')
     const [details, setDetails] = useState('')
 
     // Add user profile ---------
@@ -98,9 +91,9 @@ export default function TrainerSignupProfScreen( props ) {
         locationSelected, 
         genderSelected, 
         ageSelected, 
-        trainerGenderSelected, 
-        regimeSelected, 
-        goalSelected, 
+        trainGenderSelected, 
+        proSelected, 
+        availableDate, 
         details
         ) => {
         const dataObj = {
@@ -108,17 +101,63 @@ export default function TrainerSignupProfScreen( props ) {
             lastName: lastName, 
             email: email,
             phone: phone, 
-            locationSelected: locationSelected, 
-            genderSelected: genderSelected, 
-            ageSelected: ageSelected, 
-            trainerGenderSelected: trainerGenderSelected, 
-            regimeSelected: regimeSelected, 
-            goalSelected: goalSelected, 
+            location: locationSelected, 
+            gender: genderSelected, 
+            age: ageSelected, 
+            trainGender: trainGenderSelected, 
+            professional: proSelected, 
+            availableDate: availableDate, 
             details: details
         }
         props.add( path, dataObj )
 
         navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
+    }
+    const saveProfList = (
+        path, 
+        firstName, 
+        lastName,
+        email, 
+        phone, 
+        locationSelected, 
+        genderSelected, 
+        ageSelected, 
+        trainGenderSelected, 
+        proSelected, 
+        availableDate, 
+        details
+        ) => {
+        const dataObjProf = {
+            trainerListId: props.auth.uid,
+            firstName: firstName, 
+            lastName: lastName, 
+            email: email,
+            phone: phone, 
+            location: locationSelected, 
+            gender: genderSelected, 
+            age: ageSelected, 
+            trainGender: trainGenderSelected, 
+            professional: proSelected, 
+            availableDate: availableDate, 
+            details: details
+        }
+        // console.log(
+        //     "List = " + 
+        //     path,
+        //     firstName, 
+        //     lastName,
+        //     email, 
+        //     phone, 
+        //     locationSelected, 
+        //     genderSelected, 
+        //     ageSelected, 
+        //     trainGenderSelected, 
+        //     proSelected, 
+        //     availableDate, 
+        //     details,
+        //     props.auth.uid
+        // );
+        props.addProfList( path, dataObjProf, email )
     }
 
     return (
@@ -128,6 +167,7 @@ export default function TrainerSignupProfScreen( props ) {
                 <View style={styles.signupForm}>
 
                     <Text style={styles.label}>Please fill out to let us know about you.</Text>
+                    <Text>{email}</Text>
 
                     <View style={LINE.line1} />
 
@@ -154,14 +194,14 @@ export default function TrainerSignupProfScreen( props ) {
                     <Text style={styles.label}>Age</Text>
                         <SelectList style={styles.input} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} />
 
-                    <Text style={styles.label}>Preference for the gender of the trainer</Text>
-                        <SelectList style={styles.input} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onChangeText={(selected) => setTrainerGenderSelected(selected)} />
+                    <Text style={styles.label}>Training gender for</Text>
+                        <SelectList style={styles.input} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} />
 
-                    <Text style={styles.label}>Describe your current exercise regime</Text>
-                        <SelectList style={styles.input} setSelected={setRegimeSelected} data={dataRegime} onChangeText={(selected) => setRegimeSelected(selected)} />
+                    <Text style={styles.label}>Professional for</Text>
+                    <SelectList style={styles.input} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} />
 
-                    <Text style={styles.label}>Goal</Text>
-                        <SelectList style={styles.input} setSelected={setGoalSelected} data={dataGoal} onChangeText={(selected) => setGoalSelected(selected)} />
+                    <Text style={styles.label}>Available date</Text>
+                    <TextInput style={styles.inputTextArea} onChangeText={ (value) => setAvailableDate(value) } />
 
                     <Text style={styles.label}>Additional details</Text>
                     <TextInput
@@ -185,11 +225,26 @@ export default function TrainerSignupProfScreen( props ) {
                             locationSelected, 
                             genderSelected, 
                             ageSelected, 
-                            trainerGenderSelected, 
-                            regimeSelected, 
-                            goalSelected, 
+                            trainGenderSelected, 
+                            proSelected, 
+                            availableDate, 
                             details
-                        )}}
+                        ),
+                        saveProfList(
+                            `trainerList`, 
+                            firstName, 
+                            lastName, 
+                            email,
+                            phone, 
+                            locationSelected, 
+                            genderSelected, 
+                            ageSelected, 
+                            trainGenderSelected, 
+                            proSelected, 
+                            availableDate, 
+                            details
+                        )
+                    }}
                     >
                         <Text style={styles.buttonText}>Save</Text>
                     </TouchableOpacity>
