@@ -38,8 +38,6 @@ export default function App() {
 
   // State to set data
   const [appData, setAppData] = useState() // for users data
-  const [appTrainerDataList, setAppTrainerDataList] = useState() // for trainer data in user page
-
 
   const authObj = getAuth()
   onAuthStateChanged( authObj, (user) => {
@@ -122,7 +120,7 @@ export default function App() {
         item.id = doc.id
         FSdata.push( item )
       })
-      console.log(FSdata);
+      // console.log(FSdata);
       setAppData( FSdata )  
     })
   }
@@ -203,7 +201,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} trainerData={appTrainerDataList} signoutToTrainerScreen={signoutToTrainerScreen} /> }
+          { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerWelcomeScreen" options={{
