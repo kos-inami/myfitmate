@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 // Import Screen ----------
 import { 
   WelcomeScreen,
-  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen,
   TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
 } from "./src/screens"
 
@@ -208,6 +208,12 @@ export default function App() {
           headerTitle: "Trainer",
           headerTitleAlign: "center",
           }} component={UserTrainerDetailsScreen}>
+        </Stack.Screen>
+
+        <Stack.Screen name="UserSearchScreen" options={{
+          headerTitle: "Search",
+          headerTitleAlign: "center",
+          }} component={UserSearchScreen}>
         </Stack.Screen>
 
         {/* ------------------------------------------------------------------------------------------------------------------- */}

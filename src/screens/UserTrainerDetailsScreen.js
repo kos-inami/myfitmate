@@ -6,8 +6,6 @@ import { useRoute } from '@react-navigation/native'
 
 import { COLORS, FONTS, SIZES } from '../designSet';
 
-const image = { uri: "https://reactjs.org/logo-og.png" };
-
 export default function UserTrainerDetailsScreen( props ) {
 
     // Set navigation ----------
@@ -19,12 +17,11 @@ export default function UserTrainerDetailsScreen( props ) {
 
     // Each Items ----------
     const renderPhoto = (pho) => {
-        return <ImageBackground source={ image } resizeMode="cover" style={styles.photoSize} ><Text>{"photo = " + pho}</Text></ImageBackground>
-        // if (pho == "") {
-        //     return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} />
-        // } else {
-        //     return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize} />
-        // }
+        if (pho == "") {
+            return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
+        } else {
+            return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
+        }
     }
     const renderLocation = ( location ) => {
         if (location == 1) {
@@ -155,8 +152,8 @@ export default function UserTrainerDetailsScreen( props ) {
     return (
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
-            <View style={styles.photoArea}>
-                <View>{ renderPhoto(photo) }</View>
+            <View>
+                <View style={styles.photoArea}>{ renderPhoto(photo) }</View>
             </View>
             <View>
                 <Text style={styles.name} >{ firstName + " " + lastName }</Text>
@@ -230,11 +227,12 @@ const styles = StyleSheet.create( {
     },    
     photoSize: {
         flex: 1,
-        justifyContent: "center"
+        justifyContent: "center",
     },
     photoArea: {
         width: "100%",
-        height: 200,
+        height: 300,
+        marginBottom: 20,
     },
     name: {
         ...FONTS.h1,

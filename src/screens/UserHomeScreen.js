@@ -127,18 +127,16 @@ export default function UserHomeScreen( props ) {
     }
     const renderPhoto = (pho) => {
         if (pho == "") {
-            return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} />
+            return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize} />
+            return <ImageBackground source={ require('../../assets/iconLocation.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         }
     }
     const renderItem = ({item}) => (    // Render to items 
         <View>
             <View>
                 <Text style={styles.listBlock} onPress={ () => clickHandler(item) }>
-                    <View style={styles.photoArea}>
-                        <View>{ renderPhoto(item.photo) }</View>
-                    </View>
+                    <View style={styles.photoArea}>{ renderPhoto(item.photo) }</View>
                     <View style={styles.nameBlock}>
                         <Text style={styles.name}>{ item.firstName + " " + item.lastName }</Text>
                         <View style={{flexDirection:'row'}} >
@@ -168,6 +166,14 @@ export default function UserHomeScreen( props ) {
     if (exist == 2) {
         return (
             <View style={styles.homeView}>
+                <View>
+                    <TouchableOpacity 
+                        style={ styles.button}
+                        onPress={ () => { navigation.navigate('UserSearchScreen') }}
+                    >
+                        <Text style={styles.buttonText}>Search</Text>
+                    </TouchableOpacity>
+                </View>
                 <FlatList 
                     data={ trainerList } 
                     renderItem= {renderItem}
@@ -199,7 +205,7 @@ const styles = StyleSheet.create( {
         flex: 1,
         padding: SIZES.padding,
         width: '100%',
-        paddingBottom: 100,
+        paddingBottom: 80,
         
     },
     photoSize: {
@@ -232,4 +238,16 @@ const styles = StyleSheet.create( {
         backgroundColor: COLORS.blue,
         height: 1,
     },
+    button: {
+        backgroundColor: COLORS.blue,
+        padding: 15,
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 50,
+    },
+    buttonText: {
+        ...FONTS.p1,
+        color: 'white',
+        textAlign: 'center',
+    }
 });
