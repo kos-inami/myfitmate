@@ -18,6 +18,7 @@ import {
 } from "./src/screens"
 
 import { SignoutButton } from './components/SignoutButton'
+import { DisplayAllButton } from './components/DisplayAllButton'
 
 // Create stack navigator ----------
 const Stack = createNativeStackNavigator()
@@ -199,7 +200,8 @@ export default function App() {
         <Stack.Screen name="UserHomeScreen" options={{
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
-          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
+          headerRight: ( props ) => <DisplayAllButton/>,
+          headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
           { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>

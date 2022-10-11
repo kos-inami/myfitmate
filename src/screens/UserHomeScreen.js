@@ -1,12 +1,14 @@
-import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity, FlatList, Alert, Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity, FlatList, Alert, Keyboard, KeyboardAvoidingView, Platform, RefreshControl } from 'react-native'
 import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { useHeaderHeight } from '@react-navigation/elements'
+// import RNRestart from 'react-native-restart'
+// import {Restart} from 'fiction-expo-restart';
 
 // Firebase config ---------- // installed package
 import { firebaseConfig } from '../../config/Config'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, QuerySnapshot, Firestore } from "firebase/firestore"
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, QuerySnapshot, Firestore, where } from "firebase/firestore"
 
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
@@ -36,7 +38,67 @@ export default function UserHomeScreen( props ) {
         })
     }
 
+    // Get search data -------------
+    const getSearchData = (locationSelected, genderSelected, ageSelected, proSelected) => {
+        const FSquery = query( collection(db, 'trainerList'), where("location", "==", locationSelected ), where("gender", "==", genderSelected ), where("age", "==", ageSelected ), where("professional", "==", proSelected ) )
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            setTrainerList(FSdata)
+        })
+    }
+    const getSearchData1 = (locationSelected, proSelected) => {
+        const FSquery = query( collection(db, 'trainerList'), where("location", "==", locationSelected ), where("professional", "==", proSelected ) )
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            setTrainerList(FSdata)
+        })
+    }
+    const getSearchData2 = (locationSelected, ageSelected, proSelected) => {
+        const FSquery = query( collection(db, 'trainerList'), where("location", "==", locationSelected ), where("professional", "==", proSelected ), where("age", "==", ageSelected ) )
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            setTrainerList(FSdata)
+        })
+    }
+    const getSearchData3 = (locationSelected, ageSelected, genderSelected) => {
+        const FSquery = query( collection(db, 'trainerList'), where("location", "==", locationSelected ), where("professional", "==", ageSelected ), where("gender", "==", genderSelected ) )
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            setTrainerList(FSdata)
+        })
+    }
+
     const [exist, setExist] = useState('')
+
+    const route = useRoute();
 
     useEffect(() => {
         if(!props.auth){
@@ -52,10 +114,31 @@ export default function UserHomeScreen( props ) {
             setExist(1)
         } else {
             setExist(2)
-            getTrainerData()
-            console.log(trainerList);
+            // console.log(trainerList);
+            // console.log(route);
+            if (route.params) {
+                const { locationSelected, genderSelected, ageSelected, proSelected } = route.params
+                if(locationSelected == "" && genderSelected == "" && ageSelected == "" && proSelected == ""){
+                    getTrainerData()
+                } else if(genderSelected == "" && ageSelected == ""){
+                    console.log("Get route data 1")
+                    getSearchData1(locationSelected, proSelected)
+                } else if(genderSelected == ""){
+                    console.log("Get route data 2")
+                    getSearchData2(locationSelected, ageSelected, proSelected)
+                } else if(ageSelected == ""){
+                    console.log("Get route data 3")
+                    getSearchData3(locationSelected, proSelected, genderSelected)
+                } else {
+                    console.log("Get route data 4")
+                    getSearchData(locationSelected, genderSelected, ageSelected, proSelected)
+                }
+            } else {            
+                getTrainerData()
+                console.log("No route data");
+            }
         }
-    }, [props.data])
+    }, []) // trainerList
 
     // Each Items ----------
     const renderLocation = ( location ) => {
