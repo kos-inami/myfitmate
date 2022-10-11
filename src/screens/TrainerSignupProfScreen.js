@@ -107,7 +107,8 @@ export default function TrainerSignupProfScreen( props ) {
             trainGender: trainGenderSelected, 
             professional: proSelected, 
             availableDate: availableDate, 
-            details: details
+            details: details,
+            photo: "",
         }
         props.add( path, dataObj )
 

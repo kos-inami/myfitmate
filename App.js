@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 // Import Screen ----------
 import { 
   WelcomeScreen,
-  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen,
   TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
 } from "./src/screens"
 
@@ -203,6 +203,14 @@ export default function App() {
           }}>
           { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>
+
+        <Stack.Screen name="UserTrainerDetailsScreen" options={{
+          headerTitle: "Trainer",
+          headerTitleAlign: "center",
+          }} component={UserTrainerDetailsScreen}>
+        </Stack.Screen>
+
+        {/* ------------------------------------------------------------------------------------------------------------------- */}
 
         <Stack.Screen name="TrainerWelcomeScreen" options={{
           headerTitle: "Trainer Login",

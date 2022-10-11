@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, Alert, Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, View, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity, FlatList, Alert, Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements'
@@ -56,14 +56,6 @@ export default function UserHomeScreen( props ) {
             console.log(trainerList);
         }
     }, [props.data])
-
-
-    // const [location, setLocation] = useState('')
-
-    // Pass data detail screen ----------
-    const clickHandler = (data) => {
-        navigation.navigate('Detail', data )
-    }
 
     // Each Items ----------
     const renderLocation = ( location ) => {
@@ -133,23 +125,40 @@ export default function UserHomeScreen( props ) {
             return <Text>Shred</Text>
         }
     }
+    const renderPhoto = (pho) => {
+        if (pho == "") {
+            return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} />
+        } else {
+            return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize} />
+        }
+    }
     const renderItem = ({item}) => (    // Render to items 
         <View>
             <View>
                 <Text style={styles.listBlock} onPress={ () => clickHandler(item) }>
-                    <View>
-                        <Text>{ item.photo + "photo here" }</Text>
+                    <View style={styles.photoArea}>
+                        <View>{ renderPhoto(item.photo) }</View>
                     </View>
                     <View style={styles.nameBlock}>
                         <Text style={styles.name}>{ item.firstName + " " + item.lastName }</Text>
-                        <View style={styles.text}>{ renderLocation(item.location) }</View>
-                        <View style={styles.text}>{ renderPro(item.professional) }</View>
+                        <View style={{flexDirection:'row'}} >
+                            <Image source={ require('../../assets/iconLocation.png') } style={styles.icon} />
+                            <View style={styles.text}>{ renderLocation(item.location) }</View>
+                        </View>
+                        <View style={{flexDirection:'row'}} >
+                            <Image source={ require('../../assets/iconPro.png') } style={styles.icon} />
+                            <View style={styles.text}>{ renderPro(item.professional) }</View>
+                        </View>
                     </View>
                 </Text>
             </View>
             <View style={styles.borderBottom}></View>
         </View>
     )
+    // Pass data to detail screen ----------
+    const clickHandler = (data) => {
+        navigation.navigate('UserTrainerDetailsScreen', data )
+    }
     
     const trainerForm = () => {
         console.log("toTrainerForm")
@@ -191,10 +200,19 @@ const styles = StyleSheet.create( {
         padding: SIZES.padding,
         width: '100%',
         paddingBottom: 100,
+        
+    },
+    photoSize: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    icon: {
+        marginRight: 5,
     },
     name: {
         ...FONTS.p1,
         padding: 2,
+        marginBottom: 10,
     },
     text: {
         ...FONTS.p2,
@@ -205,6 +223,10 @@ const styles = StyleSheet.create( {
     },
     nameBlock: {
         padding: 10,
+    },
+    photoArea: {
+        width: 100,
+        height: 100,
     },
     borderBottom: {
         backgroundColor: COLORS.blue,
