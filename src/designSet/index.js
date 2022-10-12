@@ -28,11 +28,14 @@ const FONTS = {
 }
 
 const SHADOW = {
-    elevation: 5,
-    shadowColor: COLORS.black,
-    shadowOffset: {width:1, height: 8},
-    shadowRadius: 12,
-    shadowOpacity: 0.25,
+    shadowColor: "#000000",
+    shadowOffset: {
+    width: 0,
+    height: 7,
+    },
+    shadowOpacity:  0.21,
+    shadowRadius: 7.68,
+    elevation: 10
 }
 
 const LINE = {

@@ -6,6 +6,8 @@ import UserSignupProfScreen from "./UserSignupProfScreen";
 import UserHomeScreen from "./UserHomeScreen";
 import UserTrainerDetailsScreen from "./UserTrainerDetailsScreen";
 import UserSearchScreen from "./UserSearchScreen";
+import UserWorkoutListScreen from "./UserWorkoutListScreen";
+import UserSettingScreen from "./UserSettingScreen";
 
 import TrainerWelcomeScreen from "./TrainerWelcomeScreen";
 import TrainerSigninScreen from "./TrainerSigninScreen";
@@ -21,6 +23,8 @@ export { UserSignupScreen }
 export { UserHomeScreen }
 export { UserTrainerDetailsScreen }
 export { UserSearchScreen }
+export { UserWorkoutListScreen }
+export { UserSettingScreen }
 
 
 export { TrainerWelcomeScreen }

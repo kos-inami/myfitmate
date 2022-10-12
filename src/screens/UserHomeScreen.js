@@ -249,19 +249,45 @@ export default function UserHomeScreen( props ) {
     if (exist == 2) {
         return (
             <View style={styles.homeView}>
-                <View>
-                    <TouchableOpacity 
-                        style={ styles.button}
-                        onPress={ () => { navigation.navigate('UserSearchScreen') }}
-                    >
-                        <Text style={styles.buttonText}>Search</Text>
-                    </TouchableOpacity>
+                <View style={{padding: SIZES.padding}}>
+                    <View>
+                        <TouchableOpacity 
+                            style={ styles.button}
+                            onPress={ () => { navigation.navigate('UserSearchScreen') }}
+                        >
+                            <Text style={styles.buttonText}>Search</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <FlatList 
+                        data={ trainerList } 
+                        renderItem= {renderItem}
+                        keyExtractor={ item => item.id }
+                    />
                 </View>
-                <FlatList 
-                    data={ trainerList } 
-                    renderItem= {renderItem}
-                    keyExtractor={ item => item.id }
-                />
+                <View style={styles.nav}>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserWorkoutListScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconWorkout.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Workout</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.navMenu}>
+                        <Image source={ require('../../assets/iconTrainer.png') } style={styles.navBtnActive} />
+                        <Text style={styles.navBtnActive}>Trainer</Text>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserSettingScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconSetting.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Setting</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         )
     } else {
@@ -286,9 +312,8 @@ const styles = StyleSheet.create( {
     homeView: {
         backgroundColor: COLORS.white,
         flex: 1,
-        padding: SIZES.padding,
         width: '100%',
-        paddingBottom: 80,
+        paddingBottom: 130,
         
     },
     photoSize: {
@@ -324,7 +349,6 @@ const styles = StyleSheet.create( {
     button: {
         backgroundColor: COLORS.blue,
         padding: 15,
-        marginTop: 10,
         marginBottom: 10,
         borderRadius: 50,
     },
@@ -332,5 +356,28 @@ const styles = StyleSheet.create( {
         ...FONTS.p1,
         color: 'white',
         textAlign: 'center',
-    }
+    },
+    nav: {
+        position: 'absolute',
+        bottom: 0,
+        flexDirection: "row",
+        width: '100%',
+        justifyContent: "space-around",
+        paddingTop: 10,
+        paddingBottom: 10,
+        backgroundColor: COLORS.orange,
+    },
+    navBtn: {
+        color: COLORS.white, 
+        opacity: 0.5,
+        fontWeight: "800",
+    },
+    navBtnActive: {
+        color: COLORS.white, 
+        opacity: 1,
+        fontWeight: "800",
+    },
+    navMenu: {
+        alignItems: 'center'
+    },
 });

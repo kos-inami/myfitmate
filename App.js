@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 // Import Screen ----------
 import { 
   WelcomeScreen,
-  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserSettingScreen,
   TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
 } from "./src/screens"
 
@@ -216,6 +216,18 @@ export default function App() {
           headerTitle: "Search",
           headerTitleAlign: "center",
           }} component={UserSearchScreen}>
+        </Stack.Screen>
+
+        <Stack.Screen name="UserWorkoutListScreen" options={{
+          headerTitle: "Your Workout",
+          headerTitleAlign: "center",
+          }} component={UserWorkoutListScreen}>
+        </Stack.Screen>
+
+        <Stack.Screen name="UserSettingScreen" options={{
+          headerTitle: "Setting",
+          headerTitleAlign: "center",
+          }} component={UserSettingScreen}>
         </Stack.Screen>
 
         {/* ------------------------------------------------------------------------------------------------------------------- */}
