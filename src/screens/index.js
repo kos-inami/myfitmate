@@ -8,6 +8,7 @@ import UserTrainerDetailsScreen from "./UserTrainerDetailsScreen";
 import UserSearchScreen from "./UserSearchScreen";
 import UserWorkoutListScreen from "./UserWorkoutListScreen";
 import UserSettingScreen from "./UserSettingScreen";
+import UserWorkoutDetailsScreen from "./UserWorkoutDetailsScreen";
 
 import TrainerWelcomeScreen from "./TrainerWelcomeScreen";
 import TrainerSigninScreen from "./TrainerSigninScreen";
@@ -25,6 +26,7 @@ export { UserTrainerDetailsScreen }
 export { UserSearchScreen }
 export { UserWorkoutListScreen }
 export { UserSettingScreen }
+export { UserWorkoutDetailsScreen }
 
 
 export { TrainerWelcomeScreen }

@@ -30,12 +30,12 @@ const FONTS = {
 const SHADOW = {
     shadowColor: "#000000",
     shadowOffset: {
-    width: 0,
-    height: 7,
+        width: 0,
+        height: 3,
     },
-    shadowOpacity:  0.21,
-    shadowRadius: 7.68,
-    elevation: 10
+    shadowOpacity:  0.17,
+    shadowRadius: 3.05,
+    elevation: 14
 }
 
 const LINE = {

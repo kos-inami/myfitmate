@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 // Import Screen ----------
 import { 
   WelcomeScreen,
-  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserSettingScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserWorkoutDetailsScreen, UserSettingScreen,
   TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
 } from "./src/screens"
 
@@ -39,6 +39,7 @@ export default function App() {
 
   // State to set data
   const [appData, setAppData] = useState() // for users data
+  const [appWorkoutData, setAppWorkoutData] = useState() // for users workout data
 
   const authObj = getAuth()
   onAuthStateChanged( authObj, (user) => {
@@ -49,6 +50,7 @@ export default function App() {
       // when auth get data ---------
       if(!appData) {
         getData(`user/${user.uid}/profile`)
+        getWorkoutData(`user/${user.uid}/workout`)
       }
 
     }
@@ -126,6 +128,42 @@ export default function App() {
     })
   }
 
+  // User Workout: Add task data into firebase ---------
+  const addWorkoutData = async (FScollection, data) => {
+    // add data to a collection with FS generated id
+    const ref = await addDoc( collection(db, FScollection), data )
+    console.log(ref.id);
+  }
+  // Get user data to display ----------
+  const getWorkoutData = ( FScollection ) => {
+    const FSquery = query( collection(db, FScollection) )
+    const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+      console.log("Start to get data");
+      let FSdata = []
+      querySnapshot.forEach((doc) => {
+        let item = {}
+        item = doc.data()
+        item.id = doc.id
+        FSdata.push( item )
+      })
+      // console.log(FSdata);
+      setAppWorkoutData( FSdata )  
+    })
+  }
+  // User workout: Delete data of workout into firebase ---------
+  const deleteData = async (del) => {
+    console.log("deleted:" + del)
+    // await deleteDoc(doc(db, `list/${user.uid}/items`, del));
+  }
+
+  // User workout:  Update workout data in firebase ---------
+  const updateData = async (upd, itemId) => {
+    console.log("updated:" + upd + " itemId: " + itemId)
+    // const updateDocRef = doc(db, `list/${user.uid}/items`, itemId)
+    // await updateDoc(updateDocRef, {
+    //   "name": upd
+    // })
+  }
 
   // Sign Out -----------
   const signout = () => {
@@ -221,7 +259,15 @@ export default function App() {
         <Stack.Screen name="UserWorkoutListScreen" options={{
           headerTitle: "Your Workout",
           headerTitleAlign: "center",
-          }} component={UserWorkoutListScreen}>
+          }}>
+          { ( props ) => <UserWorkoutListScreen {...props} addWorkout={addWorkoutData} auth={user} data={appWorkoutData} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="UserWorkoutDetailsScreen" options={{
+          headerTitle: "Details",
+          headerTitleAlign: "center",
+          }}>
+          { (props ) => <UserWorkoutDetailsScreen {...props} del={deleteData} update={updateData}/> }
         </Stack.Screen>
 
         <Stack.Screen name="UserSettingScreen" options={{
