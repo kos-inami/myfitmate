@@ -6,7 +6,7 @@ import { COLORS, FONTS, SIZES } from '../src/designSet';
 
 const deviceHight = Dimensions.get("window").height
 
-export class BottomPopup extends React.Component {
+export class BottomPopupRap extends React.Component {
 
     constructor( props ) {
         super( props )

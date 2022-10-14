@@ -7,6 +7,9 @@ import { COLORS, FONTS, SIZES } from '../designSet';
 import { useRoute } from '@react-navigation/native'
 
 import { BottomPopup } from '../../components/BottomPopup';
+import { BottomPopupWeight } from '../../components/BottomPopupWeight';
+import { BottomPopupRap } from '../../components/BottomPopupRap';
+import { BottomPopupDetails } from '../../components/BottomPopupDetails';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 
@@ -46,17 +49,39 @@ export default function UserWorkoutDetailsScreen( props ) {
     const clickAlert = (del) => {
         // console.log("OK Pressed")
         props.del( del )
-        navigation.navigate('HomeScreen', del )
+        navigation.navigate('UserWorkoutListScreen', del )
     }
 
     // For pop up ---------
     let popupRef = React.createRef()
-
     const onShowPopup = () => {
         popupRef.show()
     }
     const onClosePopup = () => {
         popupRef.close()
+    }
+
+    let popupRefWeight = React.createRef()
+    const onShowPopupWeight = () => {
+        popupRefWeight.show()
+    }
+    const onClosePopupWeight = () => {
+        popupRefWeight.close()
+    }
+
+    let popupRefRap = React.createRef()
+    const onShowPopupRap = () => {
+        popupRefRap.show()
+    }
+    const onClosePopupRap = () => {
+        popupRefRap.close()
+    }
+    let popupRefDetails = React.createRef()
+    const onShowPopupDetails = () => {
+        popupRefDetails.show()
+    }
+    const onClosePopupDetails = () => {
+        popupRefDetails.close()
     }
 
     // For update
@@ -77,15 +102,15 @@ export default function UserWorkoutDetailsScreen( props ) {
                 <Text style={styles.tableLeft}>Workout Name</Text>
                 <Text>{ nameSet }</Text>
             </TouchableOpacity>      
-            <TouchableOpacity style={styles.table} onPress={onShowPopup}>
+            <TouchableOpacity style={styles.table} onPress={onShowPopupWeight}>
                 <Text style={styles.tableLeft}>Weight</Text>
                 <Text>{ weightSet }</Text>
             </TouchableOpacity>      
-            <TouchableOpacity style={styles.table} onPress={onShowPopup}>
+            <TouchableOpacity style={styles.table} onPress={onShowPopupRap}>
                 <Text style={styles.tableLeft}>Rap</Text>
                 <Text>{ rapSet }</Text>
             </TouchableOpacity>      
-            <TouchableOpacity style={styles.table} onPress={onShowPopup}>
+            <TouchableOpacity style={styles.table} onPress={onShowPopupDetails}>
                 <Text style={styles.tableLeft}>Details</Text>
                 <Text>{ detailsSet }</Text>
             </TouchableOpacity>      
@@ -96,10 +121,31 @@ export default function UserWorkoutDetailsScreen( props ) {
                 <Text style={styles.deleteBtnText}>delete</Text>
             </TouchableOpacity>
             <BottomPopup 
-                title = "Task Name"
+                title = "Workout Name"
                 ref={(target) => popupRef = target}
                 onTouchOutside={onClosePopup}
                 data={ nameSet }
+                save={update}
+            />
+            <BottomPopupWeight 
+                title = "Weight"
+                ref={(target) => popupRefWeight = target}
+                onTouchOutside={onClosePopupWeight}
+                data={ weightSet }
+                save={update}
+            />
+            <BottomPopupRap 
+                title = "Rap"
+                ref={(target) => popupRefRap = target}
+                onTouchOutside={onClosePopupRap}
+                data={ rapSet }
+                save={update}
+            />
+            <BottomPopupDetails 
+                title = "Details"
+                ref={(target) => popupRefDetails = target}
+                onTouchOutside={onClosePopupDetails}
+                data={ detailsSet }
                 save={update}
             />
         </View>
