@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 // Import Screen ----------
 import { 
   WelcomeScreen,
-  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserWorkoutDetailsScreen, UserSettingScreen,
+  UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserWorkoutDetailsScreen, UserSettingScreen, UserProfileScreen, UserAccountScreen, 
   TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
 } from "./src/screens"
 
@@ -153,16 +153,37 @@ export default function App() {
   // User workout: Delete data of workout into firebase ---------
   const deleteData = async (del) => {
     console.log("deleted:" + del)
-    // await deleteDoc(doc(db, `list/${user.uid}/items`, del));
+    await deleteDoc(doc(db, `user/${user.uid}/workout`, del));
   }
 
   // User workout:  Update workout data in firebase ---------
-  const updateData = async (upd, itemId) => {
+  const updateNameData = async (upd, itemId) => {
     console.log("updated:" + upd + " itemId: " + itemId)
-    // const updateDocRef = doc(db, `list/${user.uid}/items`, itemId)
-    // await updateDoc(updateDocRef, {
-    //   "name": upd
-    // })
+    const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
+    await updateDoc(updateDocRef, {
+      "name": upd
+    })
+  }
+  const updateWeightData = async (upd, itemId) => {
+    console.log("updated:" + upd + " itemId: " + itemId)
+    const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
+    await updateDoc(updateDocRef, {
+      "weight": upd
+    })
+  }
+  const updateRapData = async (upd, itemId) => {
+    console.log("updated:" + upd + " itemId: " + itemId)
+    const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
+    await updateDoc(updateDocRef, {
+      "rap": upd
+    })
+  }
+  const updateDetailsData = async (upd, itemId) => {
+    console.log("updated:" + upd + " itemId: " + itemId)
+    const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
+    await updateDoc(updateDocRef, {
+      "details": upd
+    })
   }
 
   // Sign Out -----------
@@ -264,16 +285,31 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen name="UserWorkoutDetailsScreen" options={{
-          headerTitle: "Details",
+          headerTitle: "Workout Details",
           headerTitleAlign: "center",
           }}>
-          { (props ) => <UserWorkoutDetailsScreen {...props} del={deleteData} update={updateData}/> }
+          { (props ) => <UserWorkoutDetailsScreen {...props} del={deleteData} updateName={updateNameData} updateWeight={updateWeightData} updateRap={updateRapData} updateDetails={updateDetailsData}/> }
         </Stack.Screen>
 
         <Stack.Screen name="UserSettingScreen" options={{
           headerTitle: "Setting",
           headerTitleAlign: "center",
-          }} component={UserSettingScreen}>
+          }}>
+            { ( props ) => <UserSettingScreen {...props} auth={user} data={appData} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="UserProfileScreen" options={{
+          headerTitle: "Account details",
+          headerTitleAlign: "center",
+          }}>
+            { ( props ) => <UserProfileScreen {...props} auth={user} data={appData} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="UserAccountScreen" options={{
+          headerTitle: "Account details",
+          headerTitleAlign: "center",
+          }}>
+            { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} /> }
         </Stack.Screen>
 
         {/* ------------------------------------------------------------------------------------------------------------------- */}

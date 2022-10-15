@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useHeaderHeight } from '@react-navigation/elements'
 
+// Import FontAwesome Component
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 // Design set ----------
 import { COLORS, SIZES, FONTS, SHADOW } from "../designSet"
 
@@ -11,14 +14,33 @@ export default function UserSetting( props ) {
     // Set navigation ----------
     const navigation = useNavigation()
 
+    const renderPhoto = (pho) => {
+        if (pho == "") {
+            return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
+        } else {
+            return <ImageBackground source={ require('../../assets/iconLocation.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
+        }
+    }
+
+    useEffect( () => {
+        console.log( props.data )
+        console.log( props.data[0].photo )
+    }, [props.data])
+
     return (
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
-                <FlatList 
-                    // data={ trainerList } 
-                    // renderItem= {renderItem}
-                    // keyExtractor={ item => item.id }
-                />
+                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
+                <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('UserProfileScreen') }}>
+                        <Text style={{...FONTS.p2}}>Your profile</Text>
+                        <FontAwesome name="angle-right" style={styles.listArrow}/>
+                </TouchableOpacity>
+                <View style={styles.borderBottom}></View>
+                <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('UserAccountScreen') }}>
+                    <Text style={{...FONTS.p2}}>Account details</Text>
+                    <FontAwesome name="angle-right" style={styles.listArrow}/>
+                </TouchableOpacity>
+                <View style={styles.borderBottom}></View>
             </View>
             <View style={styles.nav}>
                 <View>
@@ -56,9 +78,15 @@ const styles = StyleSheet.create( {
         width: '100%',
         paddingBottom: 130,
     },
+    photoArea: {
+        width: "100%",
+        marginBottom: 40,
+        justifyContent: "center",
+        alignItems: 'center',
+    },
     photoSize: {
-        flex: 1,
-        justifyContent: "center"
+        width: 200,
+        height: 200,
     },
     icon: {
         marginRight: 5,
@@ -78,12 +106,8 @@ const styles = StyleSheet.create( {
     nameBlock: {
         padding: 10,
     },
-    photoArea: {
-        width: 100,
-        height: 100,
-    },
     borderBottom: {
-        backgroundColor: COLORS.blue,
+        backgroundColor: COLORS.gray,
         height: 1,
     },
     button: {
@@ -117,5 +141,16 @@ const styles = StyleSheet.create( {
         color: COLORS.white, 
         opacity: 1,
         fontWeight: "800",
+    },
+    listArrow: {
+        position: 'absolute',
+        right: SIZES.padding,
+        top: 20,
+        fontSize: 20,
+        color: COLORS.orange,
+    },
+    table: {
+        padding: SIZES.padding,
+        
     },
 });

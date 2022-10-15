@@ -85,11 +85,29 @@ export default function UserWorkoutDetailsScreen( props ) {
     }
 
     // For update
-    const update = (updateVal) => {
-        // console.log('updating... ' + updateVal + " where " + id )
+    const updateName = (updateVal) => {
+        console.log('updating... ' + updateVal + " where " + id )
         setNameSet(updateVal)
-        props.update( updateVal, id )
+        props.updateName( updateVal, id )
         popupRef.close()
+    }
+    const updateWeight = (updateVal) => {
+        // console.log('updating... ' + updateVal + " where " + id )
+        setWeightSet(updateVal)
+        props.updateWeight( updateVal, id )
+        popupRefWeight.close()
+    }
+    const updateRap = (updateVal) => {
+        // console.log('updating... ' + updateVal + " where " + id )
+        setRapSet(updateVal)
+        props.updateRap( updateVal, id )
+        popupRefRap.close()
+    }
+    const updateDetails = (updateVal) => {
+        // console.log('updating... ' + updateVal + " where " + id )
+        setDetailsSet(updateVal)
+        props.updateDetails( updateVal, id )
+        popupRefDetails.close()
     }
 
     return (
@@ -99,54 +117,54 @@ export default function UserWorkoutDetailsScreen( props ) {
                 <Text>{ id }</Text>
             </View> */}
             <TouchableOpacity style={styles.table} onPress={onShowPopup}>
-                <Text style={styles.tableLeft}>Workout Name</Text>
-                <Text>{ nameSet }</Text>
+                <Text style={styles.tableLeft}>Name</Text>
+                <Text style={styles.tableRight} >{ nameSet }</Text>
             </TouchableOpacity>      
             <TouchableOpacity style={styles.table} onPress={onShowPopupWeight}>
                 <Text style={styles.tableLeft}>Weight</Text>
-                <Text>{ weightSet }</Text>
+                <Text style={styles.tableRight} >{ weightSet }</Text>
             </TouchableOpacity>      
             <TouchableOpacity style={styles.table} onPress={onShowPopupRap}>
                 <Text style={styles.tableLeft}>Rap</Text>
-                <Text>{ rapSet }</Text>
+                <Text style={styles.tableRight} >{ rapSet }</Text>
             </TouchableOpacity>      
             <TouchableOpacity style={styles.table} onPress={onShowPopupDetails}>
                 <Text style={styles.tableLeft}>Details</Text>
-                <Text>{ detailsSet }</Text>
-            </TouchableOpacity>      
+                <Text style={styles.tableRight} >{ detailsSet }</Text>
+            </TouchableOpacity>
             <TouchableOpacity 
                     style={styles.deleteBtn}
                     onPress={ () => clickHandler(id) }
                 >
-                <Text style={styles.deleteBtnText}>delete</Text>
+                <Text style={styles.deleteBtnText}>- delete</Text>
             </TouchableOpacity>
             <BottomPopup 
-                title = "Workout Name"
+                title = "Name"
                 ref={(target) => popupRef = target}
                 onTouchOutside={onClosePopup}
                 data={ nameSet }
-                save={update}
+                save={updateName}
             />
             <BottomPopupWeight 
                 title = "Weight"
                 ref={(target) => popupRefWeight = target}
                 onTouchOutside={onClosePopupWeight}
                 data={ weightSet }
-                save={update}
+                save={updateWeight}
             />
             <BottomPopupRap 
                 title = "Rap"
                 ref={(target) => popupRefRap = target}
                 onTouchOutside={onClosePopupRap}
                 data={ rapSet }
-                save={update}
+                save={updateRap}
             />
             <BottomPopupDetails 
                 title = "Details"
                 ref={(target) => popupRefDetails = target}
                 onTouchOutside={onClosePopupDetails}
                 data={ detailsSet }
-                save={update}
+                save={updateDetails}
             />
         </View>
     )
@@ -163,14 +181,22 @@ const styles = StyleSheet.create( {
         flexDirection: 'row',
         marginBottom: SIZES.padding,
         borderBottomWidth: 1,
-        borderBottomColor: COLORS.gray,
+        borderBottomColor: COLORS.orange,
         paddingBottom: SIZES.padding,
     },
     tableLeft: {
+        ...FONTS.p1,
         fontWeight: "700",
         width: '34%',
     },
+    tableRight: {
+        ...FONTS.p2,
+        width: '66%',
+    },
     deleteBtn: {
-
+        marginTop: 10,
+    },
+    deleteBtnText: {
+        opacity: 0.5,
     },
 });

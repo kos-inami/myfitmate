@@ -137,7 +137,7 @@ const styles = StyleSheet.create( {
         backgroundColor: COLORS.white,
         width: 46,
         borderColor: COLORS.orange,
-        borderWidth: 2,
+        borderWidth: 3,
         borderRadius: 100,
         zIndex: 3, // works on ios
         elevation: 3, // works on android

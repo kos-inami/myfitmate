@@ -114,7 +114,8 @@ export default function UserSignupProfScreen( props ) {
             trainerGenderSelected: trainerGenderSelected, 
             regimeSelected: regimeSelected, 
             goalSelected: goalSelected, 
-            details: details
+            details: details,
+            photo: "",
         }
         props.add( path, dataObj )
 
