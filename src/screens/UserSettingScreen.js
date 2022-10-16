@@ -14,7 +14,10 @@ export default function UserSetting( props ) {
     // Set navigation ----------
     const navigation = useNavigation()
 
+    const [photo, setPhoto] = useState('')
+
     const renderPhoto = (pho) => {
+        console.log("photo = " + pho);
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
@@ -24,13 +27,20 @@ export default function UserSetting( props ) {
 
     useEffect( () => {
         console.log( props.data )
-        console.log( props.data[0].photo )
     }, [props.data])
+
+    useEffect(() => {
+        if(!props.auth){
+            navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
+        } else {
+            setPhoto(props.data[0].photo)
+        }
+    }, [props.auth])
 
     return (
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
-                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
+                <View style={styles.photoArea}>{ renderPhoto(photo) }</View>
                 <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('UserProfileScreen') }}>
                         <Text style={{...FONTS.p2}}>Your profile</Text>
                         <FontAwesome name="angle-right" style={styles.listArrow}/>

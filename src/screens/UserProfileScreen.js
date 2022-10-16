@@ -1,8 +1,10 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput } from 'react-native'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native'
+
+import SelectList from 'react-native-dropdown-select-list'
 
 import { COLORS, FONTS, SIZES } from '../designSet';
 
@@ -14,6 +16,52 @@ export default function UserProfileScreen( props ) {
     // const route = useRoute()
     // const { id, trainerListId, firstName, lastName, email, phone, location, gender, age, trainGender, professional, availableDate, details, photo } = route.params
 
+    // Item selection ----------
+    const [genderSelected, setGenderSelected] = useState(props.data[0].genderSelected)
+    const dataGender = [
+        {key:'1',value:'Male'},
+        {key:'2',value:'Female'},
+        {key:'3',value:'Others'},
+    ]
+
+    const [ageSelected, setAgeSelected] = useState(props.data[0].ageSelected)
+    const dataAge = [
+        {key:'1',value:'18-25'},
+        {key:'2',value:'26-30'},
+        {key:'3',value:'31-35'},
+        {key:'4',value:'36-40'},
+        {key:'5',value:'41-45'},
+        {key:'6',value:'45-50'},
+        {key:'7',value:'51-55'},
+        {key:'8',value:'56-60'},
+        {key:'9',value:'60+'},
+    ]
+
+    const [trainerGenderSelected, setTrainerGenderSelected] = useState(props.data[0].trainerGenderSelected)
+    const dataTrainerGender = [
+        {key:'1',value:'Male'},
+        {key:'2',value:'Female'},
+        {key:'3',value:'Does not matter'},
+    ]
+
+    const [regimeSelected, setRegimeSelected] = useState(props.data[0].regimeSelected)
+    const dataRegime = [
+        {key:'1',value:'I don’t really do any exercise'},
+        {key:'2',value:'Some times in the month'},
+        {key:'3',value:'A few days in every week'},
+        {key:'4',value:'Very active - more than 4 days per week'},
+    ]
+
+    const [goalSelected, setGoalSelected] = useState(props.data[0].goalSelected)
+    const dataGoal = [
+        {key:'1',value:'Weight loss'},
+        {key:'2',value:'Build muscle'},
+        {key:'3',value:'Keep healthy'},
+        {key:'4',value:'Strength'},
+        {key:'5',value:'Shred'},
+    ]
+
+    const [details, setDetails] = useState(props.data[0].details)
 
     // Each Items ----------
     const renderPhoto = (pho) => {
@@ -162,6 +210,32 @@ export default function UserProfileScreen( props ) {
         console.log( props.data[0].photo )
     }, [props.data])
 
+    // update user profile ---------
+    // const [input, setInput] = useState("")
+    const updateProf = (
+        path, 
+        genderSelected, 
+        ageSelected, 
+        trainerGenderSelected, 
+        regimeSelected, 
+        goalSelected, 
+        details
+        ) => {
+        const dataObj = {
+            id: props.data[0].id, 
+            genderSelected: genderSelected, 
+            ageSelected: ageSelected, 
+            trainerGenderSelected: trainerGenderSelected, 
+            regimeSelected: regimeSelected, 
+            goalSelected: goalSelected, 
+            details: details,
+            photo: "",
+        }
+        props.update( path, dataObj )
+
+        navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
+    }
+
     return (
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
@@ -188,30 +262,51 @@ export default function UserProfileScreen( props ) {
             </View>
             <View>
                 <Text style={styles.tableTitle}>Gender</Text>
-                <TextInput style={[styles.text, styles.table]} >{ renderGender(props.data[0].genderSelected) }</TextInput>
+                {/* <Text style={[styles.text, styles.table]} >{ renderGender(props.data[0].genderSelected) }</Text> */}
+                <SelectList inputStyles={[styles.text]} placeholder={renderGender(props.data[0].genderSelected)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Age</Text>
-                <TextInput style={[styles.text, styles.table]} >{ renderAge(props.data[0].ageSelected) }</TextInput>
+                {/* <TextInput style={[styles.text, styles.table]} >{ renderAge(props.data[0].ageSelected) }</TextInput> */}
+                <SelectList inputStyles={[styles.text]} placeholder={renderAge(props.data[0].ageSelected)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Preference for the gender of the trainer</Text>
-                <TextInput style={[styles.text, styles.table]} >{ renderTrainFor(props.data[0].trainerGenderSelected) }</TextInput>
+                {/* <TextInput style={[styles.text, styles.table]} >{ renderTrainFor(props.data[0].trainerGenderSelected) }</TextInput> */}
+                <SelectList inputStyles={[styles.text]} placeholder={renderTrainFor(props.data[0].trainerGenderSelected)} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onChangeText={(selected) => setTrainerGenderSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Describe your current exercise regime</Text>
-                <TextInput style={[styles.text, styles.table]} >{ renderRegime(props.data[0].regimeSelected) }</TextInput>
+                {/* <TextInput style={[styles.text, styles.table]} >{ renderRegime(props.data[0].regimeSelected) }</TextInput> */}
+                <SelectList inputStyles={[styles.text]} placeholder={renderRegime(props.data[0].regimeSelected)} setSelected={setRegimeSelected} data={dataRegime} onChangeText={(selected) => setRegimeSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Goal</Text>
-                <TextInput style={[styles.text, styles.table]} >{ renderGoal(props.data[0].goalSelected) }</TextInput>
+                {/* <TextInput style={[styles.text, styles.table]} >{ renderGoal(props.data[0].goalSelected) }</TextInput> */}
+                <SelectList inputStyles={[styles.text]} placeholder={renderGoal(props.data[0].goalSelected)} setSelected={setGoalSelected} data={dataGoal} onChangeText={(selected) => setGoalSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Additional details</Text>
-                <TextInput style={[styles.text, styles.table]} >{ props.data[0].details }</TextInput>
+                {/* <TextInput style={[styles.text, styles.table]} >{ props.data[0].details }</TextInput> */}
+                <TextInput
+                    multiline={true}
+                    textAlignVertical
+                    numberOfLines={10}
+                    style={[styles.inputTextArea]}
+                    placeholder="Please write additional your information here."
+                    onChangeText={ (value) => setDetails(value) }
+                >{props.data[0].details}</TextInput>
             </View>
             <View style={styles.btnPosition}>
-                <TouchableOpacity onPress={ () => { update() }}>
+                <TouchableOpacity onPress={ () => { updateProf(
+                    `user/${props.auth.uid}/profile`,
+                    genderSelected, 
+                    ageSelected, 
+                    trainerGenderSelected, 
+                    regimeSelected, 
+                    goalSelected, 
+                    details
+                )}}>
                     <Text style={styles.button}>Update</Text>
                 </TouchableOpacity>
             </View>
@@ -297,6 +392,15 @@ const styles = StyleSheet.create( {
         padding: SIZES.padding,
         borderRadius: 10,
         textAlign: "center",
+    },
+    inputTextArea: {
+        ...FONTS.p2,
+        textAlignVertical: 'top',
+        borderColor: COLORS.orange,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        marginBottom: 15,
+        padding: 10,
     },
 });
 

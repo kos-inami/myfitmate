@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native'
 
+import SelectList from 'react-native-dropdown-select-list'
+
 import { COLORS, FONTS, SIZES } from '../designSet';
 
 export default function UserAccountScreen( props ) {
@@ -16,6 +18,29 @@ export default function UserAccountScreen( props ) {
 
 
     // Each Items ----------
+    const [firstName, setFirstName] = useState(props.data[0].firstName)
+    const [lastName, setLastName] = useState(props.data[0].lastName)
+    const [phone, setPhone] = useState(props.data[0].phone)
+
+    const [locationSelected, setLocationSelected] = useState(props.data[0].location)
+    const dataLocation = [
+        {key:'1',value:'City - CBD'},
+        {key:'2',value:'Eastern Suburbs'},
+        {key:'3',value:'South-Eastern Sydney'},
+        {key:'4',value:'Inner West'},
+        {key:'5',value:'Western Sydney'},
+        {key:'6',value:'Canterbury-Bankstown'},
+        {key:'7',value:'Hills District'},
+        {key:'8',value:'Macarthur'},
+        {key:'9',value:'South Western Sydney'},
+        {key:'10',value:'Northern Beaches'},
+        {key:'11',value:'Forest district'},
+        {key:'12',value:'Lower North Shore'},
+        {key:'13',value:'Upper North Shore'},
+        {key:'14',value:'St George'},
+        {key:'15',value:'Sutherland Shire'},
+        {key:'16',value:'Blue Mountains'},
+    ]
     const renderLocation = ( location ) => {
         if (location == 1) {
             return <Text>City - CBD</Text>
@@ -66,113 +91,50 @@ export default function UserAccountScreen( props ) {
             return <Text>Blue Mountains</Text>
         }
     }
-    const renderGender = ( gen ) => {
-        if (gen == 1) {
-            return <Text>Male</Text>
-        }
-        if (gen == 2) {
-            return <Text>Female</Text>
-        }
-        if (gen == 3) {
-            return <Text>Others</Text>
-        }
-
-    }
-    const renderAge = ( ageNum ) => {
-        if (ageNum == 1) {
-            return <Text>18-25</Text>
-        }
-        if (ageNum == 2) {
-            return <Text>26-30</Text>
-        }
-        if (ageNum == 3) {
-            return <Text>31-35</Text>
-        }
-        if (ageNum == 4) {
-            return <Text>36-40</Text>
-        }
-        if (ageNum == 5) {
-            return <Text>41-45</Text>
-        }
-        if (ageNum == 6) {
-            return <Text>45-50</Text>
-        }
-        if (ageNum == 7) {
-            return <Text>51-55</Text>
-        }
-        if (ageNum == 8) {
-            return <Text>56-60</Text>
-        }
-        if (ageNum == 9) {
-            return <Text>60+</Text>
-        }
-    }
-    const renderTrainFor = ( trainFor ) => {
-        if (trainFor == 1) {
-            return <Text>Male</Text>
-        }
-        if (trainFor == 2) {
-            return <Text>Female</Text>
-        }
-        if (trainFor == 3) {
-            return <Text>Does not matter</Text>
-        }
-    }
-    const renderRegime = ( regime ) => {
-        if (regime == 1) {
-            return <Text>I don’t really do any exercise</Text>
-        }
-        if (regime == 2) {
-            return <Text>Some times in the month</Text>
-        }
-        if (regime == 3) {
-            return <Text>A few days in every week</Text>
-        }
-        if (regime == 4) {
-            return <Text>Very active - more than 4 days per week</Text>
-        }
-    }
-    const renderGoal = ( pro ) => {
-        if (pro == 1) {
-            return <Text>Weight loss</Text>
-        }
-        if (pro == 2) {
-            return <Text>Build muscle</Text>
-        }
-        if (pro == 3) {
-            return <Text>Keep healthy</Text>
-        }
-        if (pro == 4) {
-            return <Text>Strength</Text>
-        }
-        if (pro == 5) {
-            return <Text>Shred</Text>
-        }
-    }
 
     useEffect( () => {
         console.log( props.data )
         console.log( props.data[0].photo )
     }, [props.data])
 
+    // Update user account -------------
+    const updateAccount = (
+        path, 
+        locationSelected, 
+        firstName, 
+        lastName, 
+        phone,
+        ) => {
+        const dataObj = {
+            id: props.data[0].id, 
+            locationSelected: locationSelected, 
+            firstName: firstName, 
+            lastName: lastName, 
+            phone: phone,
+        }
+        props.updateAccount( path, dataObj )
+
+        navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
+    }
+
     return (
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
             <View>
                 <Text>location</Text>
-                <Text style={styles.name} >{ renderLocation(props.data[0].locationSelected) }</Text>
+                <SelectList inputStyles={FONTS.p2} placeholder={renderLocation(props.data[0].locationSelected)} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
             </View>
             <View>
                 <Text>First name</Text>
-                <Text style={styles.name} >{ props.data[0].firstName }</Text>
+                <TextInput style={styles.name} onChangeText={ (value) => setFirstName(value) } >{ props.data[0].firstName }</TextInput>
             </View>
             <View>
                 <Text>Last name</Text>
-                <Text style={styles.name} >{ props.data[0].lastName }</Text>
+                <TextInput style={styles.name} onChangeText={ (value) => setLastName(value) } >{ props.data[0].lastName }</TextInput>
             </View>
             <View>
                 <Text>Phone number</Text>
-                <Text style={styles.name} >{ props.data[0].phone }</Text>
+                <TextInput style={styles.name} onChangeText={ (value) => setPhone(value) } >{ props.data[0].phone }</TextInput>
             </View>
             <View>
                 <Text>Email</Text>
@@ -183,7 +145,13 @@ export default function UserAccountScreen( props ) {
                 <Text style={styles.name} >**********</Text>
             </View>
             <View style={styles.btnPosition}>
-                <TouchableOpacity onPress={ () => { update() }}>
+                <TouchableOpacity onPress={ () => { updateAccount(
+                    `user/${props.auth.uid}/profile`,
+                    locationSelected, 
+                    firstName, 
+                    lastName,
+                    phone,
+                    ) }}>
                     <Text style={styles.button}>Update</Text>
                 </TouchableOpacity>
             </View>
@@ -222,7 +190,7 @@ const styles = StyleSheet.create( {
         borderColor: COLORS.orange,
         borderWidth: 1,
         borderRadius: 10,
-        padding: SIZES.padding,
+        padding: SIZES.padding-5,
         marginTop: 10,
         marginBottom: 20,
 

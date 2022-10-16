@@ -152,19 +152,19 @@ export default function UserSignupProfScreen( props ) {
                     <Text style={styles.title}>Details</Text>
 
                     <Text style={styles.label}>Gender</Text>
-                        <SelectList style={styles.input} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Age</Text>
-                        <SelectList style={styles.input} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Preference for the gender of the trainer</Text>
-                        <SelectList style={styles.input} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onChangeText={(selected) => setTrainerGenderSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setTrainerGenderSelected} data={dataTrainerGender} onChangeText={(selected) => setTrainerGenderSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Describe your current exercise regime</Text>
-                        <SelectList style={styles.input} setSelected={setRegimeSelected} data={dataRegime} onChangeText={(selected) => setRegimeSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setRegimeSelected} data={dataRegime} onChangeText={(selected) => setRegimeSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Goal</Text>
-                        <SelectList style={styles.input} setSelected={setGoalSelected} data={dataGoal} onChangeText={(selected) => setGoalSelected(selected)} />
+                        <SelectList style={styles.input} setSelected={setGoalSelected} data={dataGoal} onChangeText={(selected) => setGoalSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Additional details</Text>
                     <TextInput

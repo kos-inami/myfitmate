@@ -186,6 +186,34 @@ export default function App() {
     })
   }
 
+  // Update user prof date in firebase ---------
+  const updateUserProf = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data.details)
+    const updateDocRef = doc(db, FScollection, data.id)
+    await updateDoc(updateDocRef, {
+      "genderSelected": data.genderSelected, 
+      "ageSelected": data.ageSelected, 
+      "trainerGenderSelected": data.trainerGenderSelected, 
+      "regimeSelected": data.regimeSelected, 
+      "goalSelected": data.goalSelected, 
+      "details": data.details,
+      "photo": data.photo,
+    })
+  }
+  // Update user account date in firebase ---------
+  const updateAccount = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data)
+    const updateDocRef = doc(db, FScollection, data.id)
+    await updateDoc(updateDocRef, {
+      "locationSelected": data.locationSelected, 
+      "firstName": data.firstName, 
+      "lastName": data.lastName, 
+      "phone": data.phone,
+    })
+  }
+
   // Sign Out -----------
   const signout = () => {
   //   const authObj = getAuth()
@@ -207,7 +235,6 @@ export default function App() {
     .then( () => {
       // sign out successful
       console.log("sign out...");
-      na
     })
     .catch( () => {
       // sign out errors
@@ -251,7 +278,6 @@ export default function App() {
         <Stack.Screen name="UserSigninScreen" options={{
           headerTitle: "User Signin",
           headerTitleAlign: "center",
-          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
         { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} data={appData} signout={signout} /> }
         </Stack.Screen>
@@ -260,7 +286,6 @@ export default function App() {
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
           headerRight: ( props ) => <DisplayAllButton/>,
-          headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
           { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }
         </Stack.Screen>
@@ -294,6 +319,7 @@ export default function App() {
         <Stack.Screen name="UserSettingScreen" options={{
           headerTitle: "Setting",
           headerTitleAlign: "center",
+          headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
             { ( props ) => <UserSettingScreen {...props} auth={user} data={appData} /> }
         </Stack.Screen>
@@ -302,14 +328,14 @@ export default function App() {
           headerTitle: "Account details",
           headerTitleAlign: "center",
           }}>
-            { ( props ) => <UserProfileScreen {...props} auth={user} data={appData} /> }
+            { ( props ) => <UserProfileScreen {...props} auth={user} data={appData} update={updateUserProf}/> }
         </Stack.Screen>
 
         <Stack.Screen name="UserAccountScreen" options={{
           headerTitle: "Account details",
           headerTitleAlign: "center",
           }}>
-            { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} /> }
+            { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} updateAccount={updateAccount} /> }
         </Stack.Screen>
 
         {/* ------------------------------------------------------------------------------------------------------------------- */}
