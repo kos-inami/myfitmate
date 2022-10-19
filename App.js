@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 import { 
   WelcomeScreen,
   UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserWorkoutDetailsScreen, UserSettingScreen, UserProfileScreen, UserAccountScreen, 
-  TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen
+  TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen, TrainerProfileScreen
 } from "./src/screens"
 
 import { SignoutButton } from './components/SignoutButton'
@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator()
 import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, set } from "firebase/firestore"
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, set, where } from "firebase/firestore"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
@@ -36,17 +36,20 @@ const db = getFirestore( FBapp )  // initialize Firestore
 export default function App() {
 
   const [ user, setUser ] = useState()
+  const [ trainer, setTrainer ] = useState()
 
   // State to set data
   const [appData, setAppData] = useState() // for users data
   const [appWorkoutData, setAppWorkoutData] = useState() // for users workout data
+
+  const [appTrainerData, setAppTrainerData] = useState() // for users workout data
 
   const authObj = getAuth()
   onAuthStateChanged( authObj, (user) => {
     if(user) {
       setUser( user )
 
-      console.log("here in Auth");
+      console.log("here in user Auth " + user.uid);
       // when auth get data ---------
       if(!appData) {
         getData(`user/${user.uid}/profile`)
@@ -56,6 +59,22 @@ export default function App() {
     }
     else {
       setUser( null )
+    }
+  })
+  onAuthStateChanged( authObj, (trainer) => {
+    if(trainer) {
+      setTrainer( trainer )
+
+      console.log("here in trainer Auth " + trainer.uid);
+      // when auth get data ---------
+      if(!appTrainerData) {
+        console.log("hello");
+        getTrainerData(`trainer/${trainer.uid}/profile`)
+      }
+
+    }
+    else {
+      setTrainer( null )
     }
   })
 
@@ -125,6 +144,22 @@ export default function App() {
       })
       // console.log(FSdata);
       setAppData( FSdata )  
+    })
+  }
+  // Get trainer data to display ----------
+  const getTrainerData = ( FScollection ) => {
+    const FSquery = query( collection(db, FScollection) )
+    const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+      console.log("Start to get data");
+      let FSdata = []
+      querySnapshot.forEach((doc) => {
+        let item = {}
+        item = doc.data()
+        item.id = doc.id
+        FSdata.push( item )
+      })
+      console.log(FSdata);
+      setAppTrainerData( FSdata )
     })
   }
 
@@ -211,6 +246,50 @@ export default function App() {
       "firstName": data.firstName, 
       "lastName": data.lastName, 
       "phone": data.phone,
+    })
+  }
+
+  // Update trainer prof date in firebase ---------
+  const updateTrainerProf = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data)
+    const updateDocRef = doc(db, FScollection, data.id)
+    // await updateDoc(updateDocRef, {
+    //   "genderSelected": data.genderSelected, 
+    //   "ageSelected": data.ageSelected, 
+    //   "trainerGenderSelected": data.trainerGenderSelected, 
+    //   "regimeSelected": data.regimeSelected, 
+    //   "goalSelected": data.goalSelected, 
+    //   "details": data.details,
+    //   "photo": data.photo,
+    // })
+  }
+  const [trainerListId, setTrainerListId] = useState('')
+  // Update trainer prof date in firebase ---------
+  const updateTrainerProfList = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data)
+    const updateDocRef = query( collection(db, FScollection), where("trainerListId", "==", data.id ))
+    const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
+      let FSdata = []
+      querySnapshot.forEach((doc) => {
+          let itemTrainer = {}
+          itemTrainer = doc.data()
+          itemTrainer.id = doc.id
+          FSdata.push( itemTrainer )
+      })
+      setTrainerListId(FSdata[0].id);
+      // setTrainerListId(querySnapshot);
+  })  
+    console.log(trainerListId, data.gender, data.age, data.trainGender, data.professional, data.availableDate, data.details);
+    const updateTrainerDoc = doc(db, FScollection, trainerListId)
+    await updateDoc(updateTrainerDoc, {
+      "gender": data.gender, 
+      "age": data.age, 
+      "trainGender": data.trainGender, 
+      "professional": data.professional, 
+      "availableDate": data.availableDate, 
+      "details": data.details,
     })
   }
 
@@ -321,11 +400,11 @@ export default function App() {
           headerTitleAlign: "center",
           headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-            { ( props ) => <UserSettingScreen {...props} auth={user} data={appData} /> }
+          { ( props ) => <UserSettingScreen {...props} auth={user} data={appData} /> }
         </Stack.Screen>
 
         <Stack.Screen name="UserProfileScreen" options={{
-          headerTitle: "Account details",
+          headerTitle: "Your profile",
           headerTitleAlign: "center",
           }}>
             { ( props ) => <UserProfileScreen {...props} auth={user} data={appData} update={updateUserProf}/> }
@@ -372,7 +451,14 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-          { ( props ) => <TrainerHomeScreen {...props} auth={user} /> }
+          { ( props ) => <TrainerHomeScreen {...props} auth={trainer} data={appTrainerData} /> }
+        </Stack.Screen>
+
+        <Stack.Screen name="TrainerProfileScreen" options={{
+          headerTitle: "Your profile",
+          headerTitleAlign: "center",
+          }}>
+            { ( props ) => <TrainerProfileScreen {...props} auth={trainer} data={appTrainerData} update={updateTrainerProf} updateList={updateTrainerProfList}/> }
         </Stack.Screen>
 
       </Stack.Navigator>
