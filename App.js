@@ -14,7 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'; // 
 import { 
   WelcomeScreen,
   UserWelcomeScreen, UserSignupScreen, UserSignupProfScreen, UserSigninScreen, UserHomeScreen, UserTrainerDetailsScreen, UserSearchScreen, UserWorkoutListScreen, UserWorkoutDetailsScreen, UserSettingScreen, UserProfileScreen, UserAccountScreen, 
-  TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen, TrainerProfileScreen
+  TrainerWelcomeScreen, TrainerSignupScreen, TrainerSignupProfScreen, TrainerSigninScreen, TrainerHomeScreen, TrainerProfileScreen, TrainerAccountScreen
 } from "./src/screens"
 
 import { SignoutButton } from './components/SignoutButton'
@@ -254,15 +254,14 @@ export default function App() {
     console.log("path:" + FScollection + " itemId: " + data.id)
     console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
-    // await updateDoc(updateDocRef, {
-    //   "genderSelected": data.genderSelected, 
-    //   "ageSelected": data.ageSelected, 
-    //   "trainerGenderSelected": data.trainerGenderSelected, 
-    //   "regimeSelected": data.regimeSelected, 
-    //   "goalSelected": data.goalSelected, 
-    //   "details": data.details,
-    //   "photo": data.photo,
-    // })
+    await updateDoc(updateDocRef, {
+      "gender": data.gender, 
+      "age": data.age, 
+      "trainGender": data.trainGender, 
+      "professional": data.professional, 
+      "availableDate": data.availableDate, 
+      "details": data.details,
+    })
   }
   const [trainerListId, setTrainerListId] = useState('')
   // Update trainer prof date in firebase ---------
@@ -290,6 +289,45 @@ export default function App() {
       "professional": data.professional, 
       "availableDate": data.availableDate, 
       "details": data.details,
+    })
+  }
+
+  // Update trainer account date in firebase ---------
+  const updateTrainerAccount = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data)
+    const updateDocRef = doc(db, FScollection, data.id)
+    await updateDoc(updateDocRef, {
+      "location": data.location, 
+      "firstName": data.firstName, 
+      "lastName": data.lastName, 
+      "phone": data.phone,
+    })
+  }
+  // Update trainer prof date in firebase ---------
+  const updateAccountTrainerList = async (FScollection, data) => {
+    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log(data)
+    const updateDocRef = query( collection(db, FScollection), where("trainerListId", "==", data.id ))
+    const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
+      let FSdataTrainer = []
+      querySnapshot.forEach((doc) => {
+          let itemTrainer = {}
+          itemTrainer = doc.data()
+          itemTrainer.id = doc.id
+          FSdataTrainer.push( itemTrainer )
+      })
+      console.log("data here ----------");
+      console.log(FSdataTrainer[0].id);
+      // setTrainerListId(FSdataTrainer[0].id);
+  })  
+    console.log(trainerListId, data.location, data.firstName, data.lastName, data.phone);
+    const updateTrainerDoc = doc(db, FScollection, trainerListId)
+    await updateDoc(updateTrainerDoc, {
+      "location": data.location, 
+      "firstName": data.firstName, 
+      "lastName": data.lastName, 
+      "phone": data.phone,
     })
   }
 
@@ -459,6 +497,13 @@ export default function App() {
           headerTitleAlign: "center",
           }}>
             { ( props ) => <TrainerProfileScreen {...props} auth={trainer} data={appTrainerData} update={updateTrainerProf} updateList={updateTrainerProfList}/> }
+        </Stack.Screen>
+
+        <Stack.Screen name="TrainerAccountScreen" options={{
+          headerTitle: "Account detail",
+          headerTitleAlign: "center",
+          }}>
+            { ( props ) => <TrainerAccountScreen {...props} auth={trainer} data={appTrainerData} updateAccount={updateTrainerAccount} updateAccountTrainerList={updateAccountTrainerList}/> }
         </Stack.Screen>
 
       </Stack.Navigator>

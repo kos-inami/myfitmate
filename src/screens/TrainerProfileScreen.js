@@ -185,10 +185,10 @@ export default function TrainerProfileScreen( props ) {
     }
 
     useEffect( () => {
-        console.log("prof data here ----------");
-        console.log( props.data[0] )
-        console.log("auth data here ----------");
-        console.log( props.auth.uid )
+        // console.log("prof data here ----------");
+        // console.log( props.data[0] )
+        // console.log("auth data here ----------");
+        // console.log( props.auth.uid )
     }, [props.data])
 
     // update user profile ---------
@@ -262,19 +262,19 @@ export default function TrainerProfileScreen( props ) {
             </View>
             <View>
                 <Text style={styles.tableTitle}>Gender</Text>
-                <SelectList inputStyles={[styles.text]} placeholder={renderGender(props.data[0].gender)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
+                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderGender(props.data[0].gender)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Age</Text>
-                <SelectList inputStyles={[styles.text]} placeholder={renderAge(props.data[0].age)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
+                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderAge(props.data[0].age)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Preference for the gender of the trainer</Text>
-                <SelectList inputStyles={[styles.text]} placeholder={renderTrainFor(props.data[0].trainGender)} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} search={false} />
+                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderTrainFor(props.data[0].trainGender)} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Professional</Text>
-                <SelectList inputStyles={[styles.text]} placeholder={renderPro(props.data[0].professional)} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
+                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderPro(props.data[0].professional)} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
             </View>
             <View>
                 <Text style={styles.tableTitle}>Available Date</Text>
@@ -357,6 +357,11 @@ const styles = StyleSheet.create( {
     },
     text: {
         ...FONTS.p2,
+        borderColor:COLORS.blue,
+        borderWidth: 1,
+        width: "100%",
+        padding: SIZES.padding - 5,
+        borderRadius: 6,
     },
     textBold: {
         ...FONTS.p1,
@@ -369,7 +374,7 @@ const styles = StyleSheet.create( {
     table: {
         marginBottom: SIZES.padding - 5,
         // backgroundColor: COLORS.gray,
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1,
         padding: SIZES.padding - 5,
         borderRadius: 6,
@@ -395,8 +400,9 @@ const styles = StyleSheet.create( {
         width: '100%',
     },
     button: {
+        ...FONTS.p2,
         color: COLORS.white,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.blue,
         padding: SIZES.padding,
         borderRadius: 10,
         textAlign: "center",
@@ -404,7 +410,7 @@ const styles = StyleSheet.create( {
     inputTextArea: {
         ...FONTS.p2,
         textAlignVertical: 'top',
-        borderColor: COLORS.orange,
+        borderColor: COLORS.blue,
         borderWidth: 1.5,
         borderRadius: 6,
         marginBottom: 15,

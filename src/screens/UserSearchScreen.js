@@ -82,16 +82,16 @@ export default function UserSearchScreen( props ) {
                 <View style={styles.signupForm}>
 
                     <Text style={styles.label}>Location * (*Regions of Sydney)</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Professional for *</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Gender</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Age</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
 
                     <TouchableOpacity 
                         style={ styles.button }

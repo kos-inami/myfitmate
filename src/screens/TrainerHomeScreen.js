@@ -34,7 +34,12 @@ export default function TrainerHomeScreen( props ) {
         if(!props.auth){
             navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
         } else {
-            setPhoto(props.data[0].photo)
+            if (!props.data[0].photo) {
+                console.log("sign in error!!!");
+            }
+            else {            
+                setPhoto(props.data[0].photo)
+            }
         }
     }, [props.auth])
 

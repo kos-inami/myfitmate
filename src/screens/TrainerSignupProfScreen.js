@@ -174,7 +174,7 @@ export default function TrainerSignupProfScreen( props ) {
                     <View style={LINE.line1} />
 
                     <Text style={styles.label}>Location (*Regions of Sydney)</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
                         {/* <Text>location: {locationSelected}</Text> */}
 
                     <Text style={styles.label}>First name</Text>
@@ -191,16 +191,16 @@ export default function TrainerSignupProfScreen( props ) {
                     <Text style={styles.title}>Details</Text>
 
                     <Text style={styles.label}>Gender</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} />
 
                     <Text style={styles.label}>Age</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} />
 
                     <Text style={styles.label}>Training gender for</Text>
-                        <SelectList style={styles.trainerInput} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} />
+                        <SelectList boxStyles={styles.trainerInput} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} />
 
                     <Text style={styles.label}>Professional for</Text>
-                    <SelectList style={styles.trainerInput} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} />
+                    <SelectList boxStyles={styles.trainerInput} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} />
 
                     <Text style={styles.label}>Available date</Text>
                     <TextInput style={styles.inputTextArea} onChangeText={ (value) => setAvailableDate(value) } />

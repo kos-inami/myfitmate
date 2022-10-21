@@ -138,6 +138,7 @@ export default function UserHomeScreen( props ) {
                 console.log("No route data");
             }
         }
+    // }, [trainerList]) // trainerList
     }, []) // trainerList
 
     // Each Items ----------

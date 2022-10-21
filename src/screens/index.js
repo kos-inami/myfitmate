@@ -18,6 +18,7 @@ import TrainerSignupScreen from "./TrainerSignupScreen";
 import TrainerSignupProfScreen from "./TrainerSignupProfScreen";
 import TrainerHomeScreen from "./TrainerHomeScreen";
 import TrainerProfileScreen from "./TrainerProfileScreen";
+import TrainerAccountScreen from "./TrainerAccountScreen";
 
 export { WelcomeScreen }
 export { UserWelcomeScreen }
@@ -40,3 +41,4 @@ export { TrainerSignupScreen }
 export { TrainerSignupProfScreen }
 export { TrainerHomeScreen }
 export { TrainerProfileScreen }
+export { TrainerAccountScreen }
