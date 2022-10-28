@@ -67,8 +67,9 @@ export default function TrainerSigninScreen( props ) {
     }, [email, password])
 
     useEffect (() => {
+        console.log("here");
+        console.log(email);
         if (props.auth) {
-            
             navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
         }
     }, [props.auth])
@@ -89,10 +90,7 @@ export default function TrainerSigninScreen( props ) {
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signIn(
-                            email, 
-                            password,
-                            ) }}
+                        onPress={ () => { signIn( email, password, ) }}
                     >
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>

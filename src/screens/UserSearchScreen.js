@@ -81,17 +81,19 @@ export default function UserSearchScreen( props ) {
             <ScrollView style={styles.container}>
                 <View style={styles.signupForm}>
 
-                    <Text style={styles.label}>Location * (*Regions of Sydney)</Text>
+                    <Text style={{color: COLORS.red, marginBottom:10}}>* Location and Professional are required.</Text>
+
+                    <Text style={styles.label}>Location<Text style={{color: COLORS.red}}> * </Text>(Regions of Sydney)</Text>
                         <SelectList boxStyles={styles.trainerInput} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
 
-                    <Text style={styles.label}>Professional for *</Text>
+                    <Text style={styles.label}>Professional for <Text style={{color: COLORS.red}}>*</Text></Text>
                         <SelectList boxStyles={styles.trainerInput} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Gender</Text>
-                        <SelectList boxStyles={styles.trainerInput} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInputGray} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
 
                     <Text style={styles.label}>Age</Text>
-                        <SelectList boxStyles={styles.trainerInput} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
+                        <SelectList boxStyles={styles.trainerInputGray} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
 
                     <TouchableOpacity 
                         style={ styles.button }
@@ -149,6 +151,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginBottom: 15,
         padding: 10,
+    },
+    trainerInputGray: {
+        borderColor: COLORS.black,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        marginBottom: 15,
+        padding: 10,
+        opacity: 0.5,
     },
     inputTextArea: {
         textAlignVertical: 'top',

@@ -14,7 +14,7 @@ export default function TrainerHomeScreen( props ) {
     // Set navigation ----------
     const navigation = useNavigation()
 
-    const [photo, setPhoto] = useState('')
+    // const [photoSet, setPhotoSet] = useState('')
 
     const renderPhoto = (pho) => {
         console.log("photo = " + pho);
@@ -27,10 +27,10 @@ export default function TrainerHomeScreen( props ) {
 
     useEffect( () => {
 
-        console.log( "data ---------" )
-        console.log( props.data )
+        console.log( "Trainer data ---------" )
+        console.log( props.data)
 
-    }, [photo])
+    }, [props.data])
 
     useEffect(() => {
         if(!props.auth){
@@ -41,7 +41,7 @@ export default function TrainerHomeScreen( props ) {
     return (
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
-                {/* <View style={styles.photoArea}>{ renderPhoto(photo) }</View> */}
+                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
                 <Text>Welcome Back</Text>
                 <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('TrainerProfileScreen') }}>
                         <Text style={{...FONTS.p2}}>Your profile</Text>

@@ -150,7 +150,7 @@ export default function App() {
   const getTrainerData = ( FScollection ) => {
     const FSquery = query( collection(db, FScollection) )
     const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
-      console.log("Start to get data");
+      console.log("Start to get TRAINER data");
       let FSdata = []
       querySnapshot.forEach((doc) => {
         let item = {}
@@ -467,21 +467,21 @@ export default function App() {
           headerTitle: "Create a trainer account",
           headerTitleAlign: "center",
           }}>
-          { ( props ) => <TrainerSignupScreen {...props} signup={register} auth={user} /> }
+          { ( props ) => <TrainerSignupScreen {...props} signup={register} auth={trainer} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerSignupProfScreen" options={{
           headerTitle: "Profile",
           headerTitleAlign: "center",
           }}>
-          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} addProfList={addTrainerDataList} auth={user} data={appData} /> }
+          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} addProfList={addTrainerDataList} auth={trainer} data={appTrainerData} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerSigninScreen" options={{
           headerTitle: "Trainer Login",
           headerTitleAlign: "center",
           }}>
-          { ( props ) => <TrainerSigninScreen {...props} signin={signin} auth={user} /> }
+          { ( props ) => <TrainerSigninScreen {...props} signin={signin} auth={trainer} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerHomeScreen" options={{
