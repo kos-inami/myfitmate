@@ -1,12 +1,12 @@
-import React from "react";
+import * as React from "react"
 import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput } from 'react-native'
-import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
 
-import { COLORS, FONTS, SIZES } from '../designSet';
+import { COLORS, FONTS, SIZES } from '../designSet'
 
 export default function UserProfileScreen( props ) {
 
@@ -235,13 +235,40 @@ export default function UserProfileScreen( props ) {
 
         navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
     }
+    const updatePhoto = () => {
+        console.log("you clicked ");
+    }
+
+    // For reanimated bottom sheet ---------
+    const renderContent = () => (
+    <View
+        style={{
+        backgroundColor: 'white',
+        padding: 16,
+        height: 450,
+        }}
+    >
+        <Text>Swipe down to close</Text>
+    </View>
+    );
+
+    const sheetRef = React.useRef(null);
 
     return (
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
             <View>
                 <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
+                <TouchableOpacity onPress={ () => updatePhoto()}>
+                    <Text style={styles.photoUpdate}>Update profile photo</Text>
+                </TouchableOpacity>
             </View>
+            {/* <BottomSheet
+                ref={sheetRef}
+                snapPoints={[450, 300, 0]}
+                borderRadius={10}
+                renderContent={renderContent}
+            /> */}
             <View>
                 <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
             </View>
@@ -387,6 +414,7 @@ const styles = StyleSheet.create( {
         width: '100%',
     },
     button: {
+        ...FONTS.p1,
         color: COLORS.white,
         backgroundColor: COLORS.orange,
         padding: SIZES.padding,
@@ -401,6 +429,13 @@ const styles = StyleSheet.create( {
         borderRadius: 6,
         marginBottom: 15,
         padding: 10,
+    },
+    photoUpdate: {
+        // ...FONTS.p2,
+        color: COLORS.orange,
+        paddingBottom: SIZES.padding,
+        borderRadius: 10,
+        textAlign: 'right',
     },
 });
 

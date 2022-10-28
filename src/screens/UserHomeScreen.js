@@ -133,13 +133,13 @@ export default function UserHomeScreen( props ) {
                     console.log("Get route data 4")
                     getSearchData(locationSelected, genderSelected, ageSelected, proSelected)
                 }
-            } else {            
+            } else {
                 getTrainerData()
                 console.log("No route data");
             }
         }
-    // }, [trainerList]) // trainerList
-    }, []) // trainerList
+    }, [trainerList]) // trainerList
+    // }, []) // trainerList
 
     // Each Items ----------
     const renderLocation = ( location ) => {

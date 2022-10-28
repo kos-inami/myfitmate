@@ -213,7 +213,7 @@ export default function TrainerProfileScreen( props ) {
         }
         props.update( path, dataObj )
 
-        navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
+        navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]} )
     }
     const updateProfList = (
         path, 

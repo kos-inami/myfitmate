@@ -393,7 +393,7 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen name="UserSigninScreen" options={{
-          headerTitle: "User Signin",
+          headerTitle: "User Login",
           headerTitleAlign: "center",
           }}>
         { ( props ) => <UserSigninScreen {...props} signin={signin} auth={user} data={appData} signout={signout} /> }
@@ -478,7 +478,7 @@ export default function App() {
         </Stack.Screen>
 
         <Stack.Screen name="TrainerSigninScreen" options={{
-          headerTitle: "Trainer Signin",
+          headerTitle: "Trainer Login",
           headerTitleAlign: "center",
           }}>
           { ( props ) => <TrainerSigninScreen {...props} signin={signin} auth={user} /> }

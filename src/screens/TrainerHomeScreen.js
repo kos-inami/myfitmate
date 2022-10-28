@@ -26,27 +26,23 @@ export default function TrainerHomeScreen( props ) {
     }
 
     useEffect( () => {
+
         console.log( "data ---------" )
         console.log( props.data )
-    }, [props.data])
+
+    }, [photo])
 
     useEffect(() => {
         if(!props.auth){
             navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
-        } else {
-            if (!props.data[0].photo) {
-                console.log("sign in error!!!");
-            }
-            else {            
-                setPhoto(props.data[0].photo)
-            }
         }
     }, [props.auth])
 
     return (
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
-                <View style={styles.photoArea}>{ renderPhoto(photo) }</View>
+                {/* <View style={styles.photoArea}>{ renderPhoto(photo) }</View> */}
+                <Text>Welcome Back</Text>
                 <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('TrainerProfileScreen') }}>
                         <Text style={{...FONTS.p2}}>Your profile</Text>
                         <FontAwesome name="angle-right" style={styles.listArrow}/>
