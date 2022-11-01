@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
+import * as ImagePicker from 'expo-image-picker'
+// import Contents from 'expo-constants'
 
 import { COLORS, FONTS, SIZES } from '../designSet'
 
@@ -63,12 +65,16 @@ export default function UserProfileScreen( props ) {
 
     const [details, setDetails] = useState(props.data[0].details)
 
+    const [image, setImage] = useState(props.data[0].photo);
     // Each Items ----------
-    const renderPhoto = (pho) => {
-        if (pho == "") {
+    const renderPhoto = () => {
+        // setImage(pho)
+        console.log("photo = " + image);
+        if (image == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
+            // return <ImageBackground source={ {uli: image} } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
+            return <View>{image && <ImageBackground source={{uri:image}} style={styles.photoSize}/>}</View>
         }
     }
     const renderLocation = ( location ) => {
@@ -235,9 +241,22 @@ export default function UserProfileScreen( props ) {
 
         navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
     }
-    const updatePhoto = () => {
-        console.log("you clicked ");
-    }
+    
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
 
     // For reanimated bottom sheet ---------
     const renderContent = () => (
@@ -258,8 +277,8 @@ export default function UserProfileScreen( props ) {
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
             <View>
-                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
-                <TouchableOpacity onPress={ () => updatePhoto()}>
+                <View style={styles.photoArea}>{ renderPhoto() }</View>
+                <TouchableOpacity onPress={ () => pickImage()}>
                     <Text style={styles.photoUpdate}>Update profile photo</Text>
                 </TouchableOpacity>
             </View>
@@ -354,6 +373,8 @@ const styles = StyleSheet.create( {
         paddingBottom: 100,
     },    
     photoSize: {
+        width: "100%",
+        height: 300,
         flex: 1,
         justifyContent: "center",
     },
