@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useHeaderHeight } from '@react-navigation/elements'
 
+// Firebase config ---------- // installed package
+import { firebaseConfig } from '../../config/Config'
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, ref, QuerySnapshot, Firestore, where } from "firebase/firestore"
+
 // Import FontAwesome Component
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
@@ -14,21 +19,42 @@ export default function TrainerHomeScreen( props ) {
     // Set navigation ----------
     const navigation = useNavigation()
 
-    // const [photoSet, setPhotoSet] = useState('')
+    const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
+    const db = getFirestore( FBapp )  // initialize Firestore
+
+    const [trainerList, setTrainerList] = useState('')
+    const [photoSet, setPhotoSet] = useState('')
+
+    const getTrainerData = () => {
+        const FSquery = query( collection(db, 'trainerList'), where("trainerListId", "==", props.auth.uid ))
+        const unsubscribe = onSnapshot(FSquery, (querySnapshot) => {
+            console.log("Start to get data");
+            let FSdata = []
+            querySnapshot.forEach((doc) => {
+                let item = {}
+                item = doc.data()
+                item.id = doc.id
+                FSdata.push( item )
+            })
+            setPhotoSet(FSdata[0].photo)
+            console.log(FSdata);
+        })
+    }
 
     const renderPhoto = (pho) => {
         console.log("photo = " + pho);
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
+            return <ImageBackground source={ {uri: pho} } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         }
     }
 
     useEffect( () => {
 
         console.log( "Trainer data ---------" )
-        console.log( props.data)
+        console.log( props.auth.uid)
+        getTrainerData()
 
     }, [props.data])
 
@@ -36,12 +62,17 @@ export default function TrainerHomeScreen( props ) {
         if(!props.auth){
             navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
         }
+        else {
+            console.log( "Trainer data ---------" )
+            // console.log( props.data[0].photo)
+        }
+
     }, [props.auth])
 
     return (
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
-                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
+                <View style={styles.photoArea}>{ renderPhoto(photoSet) }</View>
                 <Text>Welcome Back</Text>
                 <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('TrainerProfileScreen') }}>
                         <Text style={{...FONTS.p2}}>Your profile</Text>

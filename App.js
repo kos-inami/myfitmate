@@ -474,7 +474,7 @@ export default function App() {
           headerTitle: "Profile",
           headerTitleAlign: "center",
           }}>
-          { ( props ) => <TrainerSignupProfScreen {...props} add={addTrainerData} addProfList={addTrainerDataList} auth={trainer} data={appTrainerData} /> }
+          { ( props ) => <TrainerSignupProfScreen {...props} auth={trainer} add={addTrainerData} addProfList={addTrainerDataList} data={appTrainerData} /> }
         </Stack.Screen>
 
         <Stack.Screen name="TrainerSigninScreen" options={{

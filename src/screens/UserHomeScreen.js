@@ -213,7 +213,7 @@ export default function UserHomeScreen( props ) {
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
+            return <ImageBackground source={ {uri: pho} } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         }
     }
     const renderItem = ({item}) => (    // Render to items 

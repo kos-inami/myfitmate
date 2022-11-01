@@ -90,7 +90,9 @@ export default function TrainerSigninScreen( props ) {
                     <TouchableOpacity 
                         style={ (validEmail && validPassword) ? styles.button : styles.buttonDisabled }
                         disabled={ (validEmail && validPassword) ? false : true }
-                        onPress={ () => { signIn( email, password, ) }}
+                        onPress={ () => { 
+                            signIn( email, password )
+                        }}
                     >
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
