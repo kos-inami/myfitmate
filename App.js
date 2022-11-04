@@ -27,13 +27,12 @@ const Stack = createNativeStackNavigator()
 import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
-import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, set, where, } from "firebase/firestore"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
 const db = getFirestore( FBapp )  // initialize Firestore
-const storage = getStorage(FBapp)
+// const storage = getStorage(FBapp)
 
 export default function App() {
 

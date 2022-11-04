@@ -10,14 +10,13 @@ import * as ImagePicker from 'expo-image-picker'
 // Firebase config ---------- // installed package
 import { firebaseConfig } from '../../config/Config'
 import { initializeApp } from 'firebase/app'
-import { getStorage, ref, uploadBytes, storage } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 // import * as firebaseIs from "firebase";
 
 const app = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
-const storageGet = getStorage(app)
+const storage = getStorage(app)
 
 import { COLORS, FONTS, SIZES } from '../designSet'
-import { Firestore } from "firebase/firestore"
 
 export default function UserProfileScreen( props ) {
 
@@ -252,21 +251,14 @@ export default function UserProfileScreen( props ) {
         console.log("photo to firebase : " + image)
 
         // START: upload a image file to firebase -----------------------------------------------------
-        // const response = await fetch(image)
-        // const blob = await response.blob()
-        // var ref = storageGet.storage().ref().child(imageName).put(blob)
-        // try {
-        //     await ref;
-        // } catch (error) {
-        //     console.log(error)
-        // }
-        
-        // const storageRef = ref(storage, 'userImages/' + imageName);
-        // // 'file' comes from the Blob or File API
-        // uploadBytes(storageRef, image)
-        //     .then((snapshot) => {
-        //         console.log('Uploaded a blob or file!');
-        //     });
+
+        const storageRef = ref(storage, 'userImages/' + imageName);
+        // 'file' comes from the Blob or File API
+        uploadBytes(storageRef, image)
+            .then((snapshot) => {
+                console.log('Uploaded a blob or file!')
+                console.log(snapshot)
+            });
         // END: upload a image file to firebase -----------------------------------------------------
 
         // navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
