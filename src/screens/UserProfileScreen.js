@@ -6,9 +6,18 @@ import { useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
 import * as ImagePicker from 'expo-image-picker'
-// import Contents from 'expo-constants'
+
+// Firebase config ---------- // installed package
+import { firebaseConfig } from '../../config/Config'
+import { initializeApp } from 'firebase/app'
+import { getStorage, ref, uploadBytes, storage } from "firebase/storage";
+// import * as firebaseIs from "firebase";
+
+const app = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
+const storageGet = getStorage(app)
 
 import { COLORS, FONTS, SIZES } from '../designSet'
+import { Firestore } from "firebase/firestore"
 
 export default function UserProfileScreen( props ) {
 
@@ -66,6 +75,7 @@ export default function UserProfileScreen( props ) {
     const [details, setDetails] = useState(props.data[0].details)
 
     const [image, setImage] = useState(props.data[0].photo);
+    const [imageName, setImageName] = useState('');
     // Each Items ----------
     const renderPhoto = () => {
         // setImage(pho)
@@ -218,14 +228,15 @@ export default function UserProfileScreen( props ) {
 
     // update user profile ---------
     // const [input, setInput] = useState("")
-    const updateProf = (
+    const updateProf = async (
         path, 
         genderSelected, 
         ageSelected, 
         trainerGenderSelected, 
         regimeSelected, 
         goalSelected, 
-        details
+        details,
+        image
         ) => {
         const dataObj = {
             id: props.data[0].id, 
@@ -235,11 +246,30 @@ export default function UserProfileScreen( props ) {
             regimeSelected: regimeSelected, 
             goalSelected: goalSelected, 
             details: details,
-            photo: "",
+            photo: image,
         }
         props.update( path, dataObj )
+        console.log("photo to firebase : " + image)
 
-        navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
+        // START: upload a image file to firebase -----------------------------------------------------
+        // const response = await fetch(image)
+        // const blob = await response.blob()
+        // var ref = storageGet.storage().ref().child(imageName).put(blob)
+        // try {
+        //     await ref;
+        // } catch (error) {
+        //     console.log(error)
+        // }
+        
+        // const storageRef = ref(storage, 'userImages/' + imageName);
+        // // 'file' comes from the Blob or File API
+        // uploadBytes(storageRef, image)
+        //     .then((snapshot) => {
+        //         console.log('Uploaded a blob or file!');
+        //     });
+        // END: upload a image file to firebase -----------------------------------------------------
+
+        // navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
     }
     
     const pickImage = async () => {
@@ -254,7 +284,8 @@ export default function UserProfileScreen( props ) {
         console.log(result);
     
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImage(result.uri)
+            setImageName(result.uri.substring(result.uri.lastIndexOf('/') + 1, result.uri.length))
         }
     };
 
@@ -282,12 +313,6 @@ export default function UserProfileScreen( props ) {
                     <Text style={styles.photoUpdate}>Update profile photo</Text>
                 </TouchableOpacity>
             </View>
-            {/* <BottomSheet
-                ref={sheetRef}
-                snapPoints={[450, 300, 0]}
-                borderRadius={10}
-                renderContent={renderContent}
-            /> */}
             <View>
                 <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
             </View>
@@ -351,7 +376,8 @@ export default function UserProfileScreen( props ) {
                     trainerGenderSelected, 
                     regimeSelected, 
                     goalSelected, 
-                    details
+                    details,
+                    image,
                 )}}>
                     <Text style={styles.button}>Update</Text>
                 </TouchableOpacity>
