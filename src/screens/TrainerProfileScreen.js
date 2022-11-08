@@ -5,6 +5,15 @@ import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native'
 
 import SelectList from 'react-native-dropdown-select-list'
+import * as ImagePicker from 'expo-image-picker'
+
+// Firebase config ---------- // installed package
+import { firebaseConfig } from '../../config/Config'
+import { initializeApp } from 'firebase/app'
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, getBlobFromUri } from "firebase/storage";
+
+const app = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
+const storage = getStorage(app)
 
 import { COLORS, FONTS, SIZES } from '../designSet';
 
@@ -56,12 +65,17 @@ export default function TrainerProfileScreen( props ) {
     const [availableDate, setAvailableDate] = useState(props.data[0].availableDate)
     const [details, setDetails] = useState(props.data[0].details)
 
+    
+    const [imageSet, setImageSet] = useState(props.data[0].photo);
+    const [imageName, setImageName] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     // Each Items ----------
-    const renderPhoto = (pho) => {
-        if (pho == "") {
+    const renderPhoto = () => {
+        console.log(imageSet);
+        if (imageSet == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
-            return <ImageBackground source={ {uri: pho} } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
+            return <ImageBackground source={ {uri: imageSet} } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
         }
     }
     const renderLocation = ( location ) => {
@@ -189,29 +203,116 @@ export default function TrainerProfileScreen( props ) {
         // console.log( props.data[0] )
         // console.log("auth data here ----------");
         // console.log( props.auth.uid )
+        console.log(props.data[0].id);
     }, [props.data])
 
     // update user profile ---------
     // const [input, setInput] = useState("")
-    const updateProf = (
+    const updateProf = async (
         path, 
         genderSelected, 
         ageSelected, 
         trainGenderSelected,
         proSelected, 
         availableDate, 
-        details
+        details,
+        imageSet
         ) => {
-        const dataObj = {
-            id: props.data[0].id, 
-            gender: genderSelected, 
-            age: ageSelected, 
-            trainGender: trainGenderSelected, 
-            professional: proSelected, 
-            availableDate: availableDate, 
-            details: details,
-        }
-        props.update( path, dataObj )
+
+            console.log("photo to firebase : " + imageSet)
+            
+            if (imageSet == '') {
+                
+                const dataObj = {
+                    id: props.data[0].id, 
+                    gender: genderSelected, 
+                    age: ageSelected, 
+                    trainGender: trainGenderSelected, 
+                    professional: proSelected, 
+                    availableDate: availableDate, 
+                    details: details,
+                    photo: imageSet,
+                }
+                props.update( path, dataObj )
+
+            } else {
+
+                // START: upload a image file to firebase -----------------------------------------------------
+                const blob = await getBlobFroUri(imageSet);
+
+                const metadata = {
+                    contentType: 'image/jpeg',
+                };
+
+                // Upload file and metadata to the object 'images/mountains.jpg'
+                const storageRef = ref(storage, 'trainerImages/' + imageName);
+                const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
+
+                // Listen for state changes, errors, and completion of the upload.
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    // A full list of error codes is available at
+                    // https://firebase.google.com/docs/storage/web/handle-errors
+                    switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                    }
+                }, 
+                () => {
+                    // Upload completed successfully, now we can get the download URL
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    setImageUrl(downloadURL)
+                    console.log('image url : ' + imageUrl);
+
+                    // Uploading 
+                    const dataObjWithPhoto = {
+                        id: props.data[0].id, 
+                        gender: genderSelected, 
+                        age: ageSelected, 
+                        trainGender: trainGenderSelected, 
+                        professional: proSelected, 
+                        availableDate: availableDate, 
+                        details: details,
+                        photo: imageUrl
+                    }
+                    props.update( path, dataObjWithPhoto )
+                    
+                    updateProfList(
+                        `trainerList`,
+                        genderSelected, 
+                        ageSelected, 
+                        trainGenderSelected,
+                        proSelected, 
+                        availableDate, 
+                        details,
+                        imageUrl
+                    )
+                    });
+                }
+                );
+                // END: upload a image file to firebase -----------------------------------------------------
+            }
 
         navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]} )
     }
@@ -222,7 +323,8 @@ export default function TrainerProfileScreen( props ) {
         trainGenderSelected,
         proSelected, 
         availableDate, 
-        details
+        details,
+        imageUrl,
         ) => {
         const dataObjProf = {
             id: props.auth.uid, 
@@ -232,15 +334,71 @@ export default function TrainerProfileScreen( props ) {
             professional: proSelected, 
             availableDate: availableDate, 
             details: details,
+            photo: imageUrl
         }
         props.updateList( path, dataObjProf )
     }
 
+    
+    // Upload image from device media library and get url
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+            setImageSet(result.uri)
+            setImageName(result.uri.substring(result.uri.lastIndexOf('/') + 1, result.uri.length))
+        }
+    };
+    // Fetch uploadable image binary data.
+    const getBlobFroUri = async (uri) => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+    
+        return blob;
+    };
+
+    // For reanimated bottom sheet ---------
+    const renderContent = () => (
+    <View
+        style={{
+        backgroundColor: 'white',
+        padding: 16,
+        height: 450,
+        }}
+    >
+        <Text>Swipe down to close</Text>
+    </View>
+    );
+
+    const sheetRef = React.useRef(null);
+
+
     return (
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
-            <View>
-                <View style={styles.photoArea}>{ renderPhoto(props.data[0].photo) }</View>
+        <View>
+                <View style={styles.photoArea}>{ renderPhoto() }</View>
+                <TouchableOpacity onPress={ () => pickImage()}>
+                    <Text style={styles.photoUpdate}>Update profile photo</Text>
+                </TouchableOpacity>
             </View>
             <View>
                 <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
@@ -303,17 +461,20 @@ export default function TrainerProfileScreen( props ) {
                         trainGenderSelected,
                         proSelected, 
                         availableDate, 
-                        details
-                    ),
-                    updateProfList(
-                        `trainerList`,
-                        genderSelected, 
-                        ageSelected, 
-                        trainGenderSelected,
-                        proSelected, 
-                        availableDate, 
-                        details
+                        details,
+                        imageSet
                     )
+                    // ,
+                    // updateProfList(
+                    //     `trainerList`,
+                    //     genderSelected, 
+                    //     ageSelected, 
+                    //     trainGenderSelected,
+                    //     proSelected, 
+                    //     availableDate, 
+                    //     details,
+                    //     imageSet
+                    // )
                 }}>
                     <Text style={styles.button}>Update</Text>
                 </TouchableOpacity>
@@ -415,6 +576,13 @@ const styles = StyleSheet.create( {
         borderRadius: 6,
         marginBottom: 15,
         padding: 10,
+    },
+    photoUpdate: {
+        // ...FONTS.p2,
+        color: COLORS.orange,
+        paddingBottom: SIZES.padding,
+        borderRadius: 10,
+        textAlign: 'right',
     },
 });
 

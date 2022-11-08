@@ -73,7 +73,6 @@ export default function TrainerHomeScreen( props ) {
         <View style={styles.homeView}>
             <View style={{padding: SIZES.padding}}>
                 <View style={styles.photoArea}>{ renderPhoto(photoSet) }</View>
-                <Text>Welcome Back</Text>
                 <TouchableOpacity style={styles.table} onPress={ () => { navigation.navigate('TrainerProfileScreen') }}>
                         <Text style={{...FONTS.p2}}>Your profile</Text>
                         <FontAwesome name="angle-right" style={styles.listArrow}/>

@@ -10,7 +10,7 @@ import * as ImagePicker from 'expo-image-picker'
 // Firebase config ---------- // installed package
 import { firebaseConfig } from '../../config/Config'
 import { initializeApp } from 'firebase/app'
-import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, getBlobFromUri } from "firebase/storage";
 
 const app = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
 const storage = getStorage(app)
@@ -74,6 +74,7 @@ export default function UserProfileScreen( props ) {
 
     const [image, setImage] = useState(props.data[0].photo);
     const [imageName, setImageName] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     // Each Items ----------
     const renderPhoto = () => {
         // setImage(pho)
@@ -236,75 +237,93 @@ export default function UserProfileScreen( props ) {
         details,
         image
         ) => {
-        const dataObj = {
-            id: props.data[0].id, 
-            genderSelected: genderSelected, 
-            ageSelected: ageSelected, 
-            trainerGenderSelected: trainerGenderSelected, 
-            regimeSelected: regimeSelected, 
-            goalSelected: goalSelected, 
-            details: details,
-            photo: image,
-        }
-        props.update( path, dataObj )
-        console.log("photo to firebase : " + image)
+            console.log("photo to firebase : " + image)
+            
+            if (image == '') {
+                
+                const dataObj = {
+                    id: props.data[0].id, 
+                    genderSelected: genderSelected, 
+                    ageSelected: ageSelected, 
+                    trainerGenderSelected: trainerGenderSelected, 
+                    regimeSelected: regimeSelected, 
+                    goalSelected: goalSelected, 
+                    details: details,
+                    photo: image,
+                }
+                props.update( path, dataObj )
 
-        // START: upload a image file to firebase -----------------------------------------------------
+            } else {
 
-        const metadata = {
-            contentType: 'image/jpeg',
-        };
+                // START: upload a image file to firebase -----------------------------------------------------
+                const blob = await getBlobFroUri(image);
 
-        // Upload file and metadata to the object 'images/mountains.jpg'
-        const storageRef = ref(storage, 'userImages/' + imageName);
-        const uploadTask = uploadBytesResumable(storageRef, image, metadata);
+                const metadata = {
+                    contentType: 'image/jpeg',
+                };
 
-        // Listen for state changes, errors, and completion of the upload.
-        uploadTask.on('state_changed',
-        (snapshot) => {
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-            case 'paused':
-                console.log('Upload is paused');
-                break;
-            case 'running':
-                console.log('Upload is running');
-                break;
+                // Upload file and metadata to the object 'images/mountains.jpg'
+                const storageRef = ref(storage, 'userImages/' + imageName);
+                const uploadTask = uploadBytesResumable(storageRef, blob, metadata);
+
+                // Listen for state changes, errors, and completion of the upload.
+                uploadTask.on('state_changed',
+                (snapshot) => {
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    }
+                }, 
+                (error) => {
+                    // A full list of error codes is available at
+                    // https://firebase.google.com/docs/storage/web/handle-errors
+                    switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                    }
+                }, 
+                () => {
+                    // Upload completed successfully, now we can get the download URL
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    setImageUrl(downloadURL)
+
+                    // Uploading 
+                    const dataObjWithPhoto = {
+                        id: props.data[0].id, 
+                        genderSelected: genderSelected, 
+                        ageSelected: ageSelected, 
+                        trainerGenderSelected: trainerGenderSelected, 
+                        regimeSelected: regimeSelected, 
+                        goalSelected: goalSelected, 
+                        details: details,
+                        photo: imageUrl,
+                    }
+                    props.update( path, dataObjWithPhoto )
+
+                    });
+                }
+                );
+                // END: upload a image file to firebase -----------------------------------------------------
             }
-        }, 
-        (error) => {
-            // A full list of error codes is available at
-            // https://firebase.google.com/docs/storage/web/handle-errors
-            switch (error.code) {
-            case 'storage/unauthorized':
-                // User doesn't have permission to access the object
-                break;
-            case 'storage/canceled':
-                // User canceled the upload
-                break;
 
-            // ...
-
-            case 'storage/unknown':
-                // Unknown error occurred, inspect error.serverResponse
-                break;
-            }
-        }, 
-        () => {
-            // Upload completed successfully, now we can get the download URL
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-            });
-        }
-        );
-
-        // END: upload a image file to firebase -----------------------------------------------------
-
-        // navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
+        navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
     }
-    
+    // Upload image from device media library and get url
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -320,6 +339,23 @@ export default function UserProfileScreen( props ) {
             setImage(result.uri)
             setImageName(result.uri.substring(result.uri.lastIndexOf('/') + 1, result.uri.length))
         }
+    };
+    // Fetch uploadable image binary data.
+    const getBlobFroUri = async (uri) => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+    
+        return blob;
     };
 
     // For reanimated bottom sheet ---------

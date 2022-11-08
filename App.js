@@ -224,7 +224,7 @@ export default function App() {
 
   // Update user prof date in firebase ---------
   const updateUserProf = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log("path:" + FScollection + " itemPhotoURL: " + data.photo)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "genderSelected": data.genderSelected, 
@@ -233,6 +233,7 @@ export default function App() {
       "regimeSelected": data.regimeSelected, 
       "goalSelected": data.goalSelected, 
       "details": data.details,
+      "photo": data.photo,
     })
   }
   // Update user account date in firebase ---------
@@ -250,7 +251,7 @@ export default function App() {
 
   // Update trainer prof date in firebase ---------
   const updateTrainerProf = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log("Prof path:" + FScollection + " itemId: " + data.id)
     console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
@@ -260,12 +261,13 @@ export default function App() {
       "professional": data.professional, 
       "availableDate": data.availableDate, 
       "details": data.details,
+      "photo": data.photo,
     })
   }
   const [trainerListId, setTrainerListId] = useState('')
   // Update trainer prof date in firebase ---------
   const updateTrainerProfList = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
+    console.log("List path:" + FScollection + " itemId: " + data.id)
     console.log(data)
     const updateDocRef = query( collection(db, FScollection), where("trainerListId", "==", data.id ))
     const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
@@ -279,7 +281,7 @@ export default function App() {
       setTrainerListId(FSdata[0].id);
       // setTrainerListId(querySnapshot);
   })  
-    console.log(trainerListId, data.gender, data.age, data.trainGender, data.professional, data.availableDate, data.details);
+    console.log(trainerListId, data.gender, data.age, data.trainGender, data.professional, data.availableDate, data.details, data.photo);
     const updateTrainerDoc = doc(db, FScollection, trainerListId)
     await updateDoc(updateTrainerDoc, {
       "gender": data.gender, 
@@ -288,6 +290,7 @@ export default function App() {
       "professional": data.professional, 
       "availableDate": data.availableDate, 
       "details": data.details,
+      "photo": data.photo,
     })
   }
 

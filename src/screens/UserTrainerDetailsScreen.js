@@ -20,7 +20,7 @@ export default function UserTrainerDetailsScreen( props ) {
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
+            return <ImageBackground source={ {uri: pho} } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         }
     }
     const renderLocation = ( location ) => {

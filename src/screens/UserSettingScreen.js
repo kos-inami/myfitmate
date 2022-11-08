@@ -21,7 +21,7 @@ export default function UserSetting( props ) {
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
-            return <ImageBackground source={ require('../../assets/iconLocation.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
+            return <View>{photo && <ImageBackground source={{uri:photo}} style={styles.photoSize}/>}</View>
         }
     }
 
