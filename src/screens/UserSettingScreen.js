@@ -21,12 +21,13 @@ export default function UserSetting( props ) {
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
-            return <View>{photo && <ImageBackground source={{uri:photo}} style={styles.photoSize}/>}</View>
+            return <View>{photo && <ImageBackground source={{uri:photo}} imageStyle={{ borderRadius: 10}} style={styles.photoSize}/>}</View>
         }
     }
 
     useEffect( () => {
         console.log( props.data )
+        setPhoto(props.data[0].photo)
     }, [props.data])
 
     useEffect(() => {

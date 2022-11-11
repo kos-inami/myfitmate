@@ -83,7 +83,7 @@ export default function UserProfileScreen( props ) {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
             // return <ImageBackground source={ {uli: image} } style={styles.photoSize}  imageStyle={{ borderRadius: 10}} resizeMode="cover" />
-            return <View>{image && <ImageBackground source={{uri:image}} style={styles.photoSize}/>}</View>
+            return <View>{image && <ImageBackground source={{uri:image}} imageStyle={{ borderRadius: 10}} style={styles.photoSize}/>}</View>
         }
     }
     const renderLocation = ( location ) => {
@@ -311,7 +311,7 @@ export default function UserProfileScreen( props ) {
                         regimeSelected: regimeSelected, 
                         goalSelected: goalSelected, 
                         details: details,
-                        photo: imageUrl,
+                        photo: downloadURL,
                     }
                     props.update( path, dataObjWithPhoto )
 

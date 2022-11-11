@@ -225,6 +225,7 @@ export default function App() {
   // Update user prof date in firebase ---------
   const updateUserProf = async (FScollection, data) => {
     console.log("path:" + FScollection + " itemPhotoURL: " + data.photo)
+    console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "genderSelected": data.genderSelected, 
@@ -438,7 +439,6 @@ export default function App() {
         <Stack.Screen name="UserSettingScreen" options={{
           headerTitle: "Setting",
           headerTitleAlign: "center",
-          headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
           { ( props ) => <UserSettingScreen {...props} auth={user} data={appData} /> }
         </Stack.Screen>
@@ -453,6 +453,7 @@ export default function App() {
         <Stack.Screen name="UserAccountScreen" options={{
           headerTitle: "Account details",
           headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
             { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} updateAccount={updateAccount} /> }
         </Stack.Screen>
@@ -489,7 +490,6 @@ export default function App() {
         <Stack.Screen name="TrainerHomeScreen" options={{
           headerTitle: "Trainer Home",
           headerTitleAlign: "center",
-          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
           { ( props ) => <TrainerHomeScreen {...props} auth={trainer} data={appTrainerData} /> }
         </Stack.Screen>
@@ -504,6 +504,7 @@ export default function App() {
         <Stack.Screen name="TrainerAccountScreen" options={{
           headerTitle: "Account detail",
           headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
             { ( props ) => <TrainerAccountScreen {...props} auth={trainer} data={appTrainerData} updateAccount={updateTrainerAccount} updateAccountTrainerList={updateAccountTrainerList}/> }
         </Stack.Screen>

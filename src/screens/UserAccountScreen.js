@@ -94,8 +94,14 @@ export default function UserAccountScreen( props ) {
 
     useEffect( () => {
         console.log( props.data )
-        console.log( props.data[0].photo )
     }, [props.data])
+
+    
+    // useEffect(() => {
+    //     if(!props.auth){
+    //         navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
+    //     }
+    // }, [props.auth])
 
     // Update user account -------------
     const updateAccount = (

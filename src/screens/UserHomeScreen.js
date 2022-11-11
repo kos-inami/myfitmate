@@ -96,7 +96,7 @@ export default function UserHomeScreen( props ) {
         })
     }
 
-    const [exist, setExist] = useState('')
+    // const [exist, setExist] = useState('')
 
     const route = useRoute();
 
@@ -109,12 +109,12 @@ export default function UserHomeScreen( props ) {
     // Get data ----------
     useEffect( () => {
         console.log( "--- user data ---" )
-        if (props.data == "") {
-            console.log("the data is empty")
-            setExist(1)
-        } else {
-            setExist(2)
-            // console.log(trainerList);
+        // if (props.data == "") {
+        //     console.log("the data is empty")
+        //     setExist(1)
+        // } else {
+            // setExist(2)
+            console.log(props.data);
             // console.log(route);
             if (route.params) {
                 const { locationSelected, genderSelected, ageSelected, proSelected } = route.params
@@ -137,7 +137,7 @@ export default function UserHomeScreen( props ) {
                 getTrainerData()
                 console.log("No route data");
             }
-        }
+        // }
     // }, [trainerList]) // trainerList
     }, []) // trainerList
 
@@ -247,7 +247,7 @@ export default function UserHomeScreen( props ) {
         props.signoutToTrainerScreen()
     }
 
-    if (exist == 2) {
+    // if (exist == 2) {
         return (
             <View style={styles.homeView}>
                 <View style={{padding: SIZES.padding}}>
@@ -291,20 +291,20 @@ export default function UserHomeScreen( props ) {
                 </View>
             </View>
         )
-    } else {
-        return (
-            <View style={styles.homeView}>
-                <Text>This account seems trainer's account.</Text>
-                <Text>Please login from the trainer's sign in form</Text>
-                <TouchableOpacity 
-                    style={ styles.button}
-                    onPress={ () => { trainerForm()}}
-                >
-                    <Text style={styles.buttonText}>Sign out</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+    // } else {
+        // return (
+        //     <View style={styles.homeView}>
+        //         <Text>This account seems trainer's account.</Text>
+        //         <Text>Please login from the trainer's sign in form</Text>
+        //         <TouchableOpacity 
+        //             style={ styles.button}
+        //             onPress={ () => { trainerForm()}}
+        //         >
+        //             <Text style={styles.buttonText}>Sign out</Text>
+        //         </TouchableOpacity>
+        //     </View>
+        // )
+    // }
 
 
 }
