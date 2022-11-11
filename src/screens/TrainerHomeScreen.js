@@ -54,6 +54,7 @@ export default function TrainerHomeScreen( props ) {
 
         console.log( "Trainer data ---------" )
         console.log( props.auth.uid)
+        setPhotoSet( props.data[0].photo)
         getTrainerData()
 
     }, [props.data])

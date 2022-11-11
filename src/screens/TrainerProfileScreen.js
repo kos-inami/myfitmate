@@ -71,7 +71,7 @@ export default function TrainerProfileScreen( props ) {
     const [imageUrl, setImageUrl] = useState('');
     // Each Items ----------
     const renderPhoto = () => {
-        console.log(imageSet);
+        console.log("photo url " + imageSet);
         if (imageSet == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
@@ -294,7 +294,7 @@ export default function TrainerProfileScreen( props ) {
                         professional: proSelected, 
                         availableDate: availableDate, 
                         details: details,
-                        photo: imageUrl
+                        photo: downloadURL
                     }
                     props.update( path, dataObjWithPhoto )
                     
@@ -306,15 +306,13 @@ export default function TrainerProfileScreen( props ) {
                         proSelected, 
                         availableDate, 
                         details,
-                        imageUrl
+                        downloadURL
                     )
                     });
                 }
                 );
                 // END: upload a image file to firebase -----------------------------------------------------
             }
-
-        navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]} )
     }
     const updateProfList = (
         path, 
@@ -337,6 +335,7 @@ export default function TrainerProfileScreen( props ) {
             photo: imageUrl
         }
         props.updateList( path, dataObjProf )
+        navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]} )
     }
 
     
@@ -579,7 +578,7 @@ const styles = StyleSheet.create( {
     },
     photoUpdate: {
         // ...FONTS.p2,
-        color: COLORS.orange,
+        color: COLORS.blue,
         paddingBottom: SIZES.padding,
         borderRadius: 10,
         textAlign: 'right',

@@ -27,7 +27,7 @@ const Stack = createNativeStackNavigator()
 import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, set, where, } from "firebase/firestore"
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, set, where } from "firebase/firestore"
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
@@ -252,6 +252,7 @@ export default function App() {
 
   // Update trainer prof date in firebase ---------
   const updateTrainerProf = async (FScollection, data) => {
+    console.log("Prof -------------------------------------------------------------------------------------------------------------------");
     console.log("Prof path:" + FScollection + " itemId: " + data.id)
     console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
@@ -265,12 +266,15 @@ export default function App() {
       "photo": data.photo,
     })
   }
+
   const [trainerListId, setTrainerListId] = useState('')
+  const [FSdataForTrainerList, setFSdataForTrainerList] = useState('')
   // Update trainer prof date in firebase ---------
-  const updateTrainerProfList = async (FScollection, data) => {
-    console.log("List path:" + FScollection + " itemId: " + data.id)
-    console.log(data)
-    const updateDocRef = query( collection(db, FScollection), where("trainerListId", "==", data.id ))
+  const updateTrainerProfList = async (FScollectionList, data) => {
+    console.log("List path -------------------------------------------------------------------------------------------------------------------");
+    console.log("List path:" + FScollectionList + " itemId: " + data.id)
+
+    const updateDocRef = query( collection(db, FScollectionList), where("trainerListId", "==", data.id ))
     const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
       let FSdata = []
       querySnapshot.forEach((doc) => {
@@ -279,19 +283,20 @@ export default function App() {
           itemTrainer.id = doc.id
           FSdata.push( itemTrainer )
       })
+      console.log("list ID ========================== " + FSdata[0].id);
       setTrainerListId(FSdata[0].id);
-      // setTrainerListId(querySnapshot);
-  })  
-    console.log(trainerListId, data.gender, data.age, data.trainGender, data.professional, data.availableDate, data.details, data.photo);
-    const updateTrainerDoc = doc(db, FScollection, trainerListId)
-    await updateDoc(updateTrainerDoc, {
-      "gender": data.gender, 
-      "age": data.age, 
-      "trainGender": data.trainGender, 
-      "professional": data.professional, 
-      "availableDate": data.availableDate, 
-      "details": data.details,
-      "photo": data.photo,
+
+      const updateTrainerDoc = doc(db, FScollectionList, FSdata[0].id)
+      updateDoc(updateTrainerDoc, {
+        "gender": data.gender, 
+        "age": data.age, 
+        "trainGender": data.trainGender, 
+        "professional": data.professional, 
+        "availableDate": data.availableDate, 
+        "details": data.details,
+        "photo": data.photo,
+      })
+      
     })
   }
 
