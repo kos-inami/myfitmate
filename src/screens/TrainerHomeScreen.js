@@ -23,7 +23,8 @@ export default function TrainerHomeScreen( props ) {
     const db = getFirestore( FBapp )  // initialize Firestore
 
     const [trainerList, setTrainerList] = useState('')
-    const [photoSet, setPhotoSet] = useState('')
+    // const [photoSet, setPhotoSet] = useState('')
+    const [photoSet, setPhotoSet] = useState(props.data[0].photo)
 
     const getTrainerData = () => {
         const FSquery = query( collection(db, 'trainerList'), where("trainerListId", "==", props.auth.uid ))
@@ -54,7 +55,7 @@ export default function TrainerHomeScreen( props ) {
 
         console.log( "Trainer data ---------" )
         console.log( props.auth.uid)
-        setPhotoSet( props.data[0].photo)
+        // setPhotoSet( props.data[0].photo)
         getTrainerData()
 
     }, [props.data])
