@@ -54,54 +54,112 @@ export default function UserWorkoutListScreen( props ) {
         </View>
     )
 
-    return (
-        <View style={styles.homeView}>
-            <View style={{padding: SIZES.padding}}>
-                <FlatList 
-                    data={ props.data } 
-                    renderItem= {renderItem}
-                    keyExtractor={ item => item.id }
-                />
-            </View>
-            <KeyboardAvoidingView style={styles.inputBlock}>
-                <TextInput style={styles.input} value={input} onChangeText={(val) => setInput(val)} placeholder="Create a new workout!"/>
-                <TouchableOpacity 
-                    style={ (input.length > 0) ? styles.button : styles.buttonDisabled }
-                    disabled={ (input.length > 0) ? false : true }
-                    onPress={() => {
-                        submit(`user/${props.auth.uid}/workout`, input)
-                    }}
-                >
-                    <Text style={ (input.length > 0) ? styles.buttonText : styles.buttonTextDisabled }>+</Text>
-                </TouchableOpacity>
-            </KeyboardAvoidingView>
-            <View style={styles.nav}>
-                <View style={styles.navMenu}>
-                    <Image source={ require('../../assets/iconWorkout.png') } style={styles.navBtnActive} />
-                    <Text style={styles.navBtnActive}>Workout</Text>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        onPress={ () => { navigation.navigate('UserHomeScreen') }}
-                        style={styles.navMenu}
-                    >
-                        <Image source={ require('../../assets/iconTrainer.png') } style={styles.navBtn} />
-                        <Text style={styles.navBtn}>Trainer</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        onPress={ () => { navigation.navigate('UserSettingScreen') }}
-                        style={styles.navMenu}
-                    >
-                        <Image source={ require('../../assets/iconSetting.png') } style={styles.navBtn} />
-                        <Text style={styles.navBtn}>Setting</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </View>
-    )
 
+
+    const height = useHeaderHeight()
+
+    if (Platform.OS === 'android') {
+        return (
+            <View style={styles.homeView}>
+                <View style={{padding: SIZES.padding}}>
+                    <FlatList 
+                        data={ props.data } 
+                        renderItem= {renderItem}
+                        keyExtractor={ item => item.id }
+                    />
+                </View>
+                <KeyboardAvoidingView style={styles.inputBlock}>
+                    <TextInput style={styles.input} value={input} onChangeText={(val) => setInput(val)} placeholder="Create a new workout!"/>
+                    <TouchableOpacity 
+                        style={ (input.length > 0) ? styles.button : styles.buttonDisabled }
+                        disabled={ (input.length > 0) ? false : true }
+                        onPress={() => {
+                            submit(`user/${props.auth.uid}/workout`, input)
+                        }}
+                    >
+                        <Text style={ (input.length > 0) ? styles.buttonText : styles.buttonTextDisabled }>+</Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+                <View style={styles.nav}>
+                    <View style={styles.navMenu}>
+                        <Image source={ require('../../assets/iconWorkout.png') } style={styles.navBtnActive} />
+                        <Text style={styles.navBtnActive}>Workout</Text>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserHomeScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconTrainer.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Trainer</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserSettingScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconSetting.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Setting</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    } else {
+        
+        return (
+            <View style={styles.homeView}>
+                <View style={{padding: SIZES.padding}}>
+                    <FlatList 
+                        data={ props.data } 
+                        renderItem= {renderItem}
+                        keyExtractor={ item => item.id }
+                    />
+                </View>
+                <KeyboardAvoidingView 
+                    keyboardVerticalOffset={height + 10}
+                    behavior="padding"
+                    style={styles.inputBlock} 
+                >
+                    <TextInput style={styles.input} value={input} onChangeText={(val) => setInput(val)} placeholder="Create a new workout!"/>
+                    <TouchableOpacity 
+                        style={ (input.length > 0) ? styles.button : styles.buttonDisabled }
+                        disabled={ (input.length > 0) ? false : true }
+                        onPress={() => {
+                            submit(`user/${props.auth.uid}/workout`, input)
+                        }}
+                    >
+                        <Text style={ (input.length > 0) ? styles.buttonText : styles.buttonTextDisabled }>+</Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+                <View style={styles.nav}>
+                    <View style={styles.navMenu}>
+                        <Image source={ require('../../assets/iconWorkout.png') } style={styles.navBtnActive} />
+                        <Text style={styles.navBtnActive}>Workout</Text>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserHomeScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconTrainer.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Trainer</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            onPress={ () => { navigation.navigate('UserSettingScreen') }}
+                            style={styles.navMenu}
+                        >
+                            <Image source={ require('../../assets/iconSetting.png') } style={styles.navBtn} />
+                            <Text style={styles.navBtn}>Setting</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create( {

@@ -24,7 +24,7 @@ export default function TrainerHomeScreen( props ) {
 
     const [trainerList, setTrainerList] = useState('')
     // const [photoSet, setPhotoSet] = useState('')
-    const [photoSet, setPhotoSet] = useState(props.data[0].photo)
+    const [photoSet, setPhotoSet] = useState('')
 
     const getTrainerData = () => {
         const FSquery = query( collection(db, 'trainerList'), where("trainerListId", "==", props.auth.uid ))
@@ -52,12 +52,11 @@ export default function TrainerHomeScreen( props ) {
     }
 
     useEffect( () => {
+    }, [photoSet])
 
+    useEffect( () => {
         console.log( "Trainer data ---------" )
         console.log( props.auth.uid)
-        // setPhotoSet( props.data[0].photo)
-        getTrainerData()
-
     }, [props.data])
 
     useEffect(() => {
@@ -65,8 +64,8 @@ export default function TrainerHomeScreen( props ) {
             navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
         }
         else {
-            console.log( "Trainer data ---------" )
-            // console.log( props.data[0].photo)
+            console.log( "Trainer data ---------" )        
+            getTrainerData()
         }
 
     }, [props.auth])

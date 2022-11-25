@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect } from "react";
 
 // Packages ----------
 import { StatusBar } from 'expo-status-bar';
@@ -28,13 +28,14 @@ import { getAnalytics } from 'firebase/analytics';
 import { firebaseConfig } from './config/Config'
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, query, onSnapshot, orderBy, doc, getDatabase, set, where } from "firebase/firestore"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, getRedirectResult, signInWithRedirect, deleteUser, reauthenticateWithCredential, sendEmailVerification } from 'firebase/auth'
 
 const FBapp = initializeApp( firebaseConfig ) // initialize Firebase app and store ref in a variable
 const db = getFirestore( FBapp )  // initialize Firestore
-// const storage = getStorage(FBapp)
 
 export default function App() {
+
+  const [ initializing, setInitializing] = useState(true)
 
   const [ user, setUser ] = useState()
   const [ trainer, setTrainer ] = useState()
@@ -43,10 +44,11 @@ export default function App() {
   const [appData, setAppData] = useState() // for users data
   const [appWorkoutData, setAppWorkoutData] = useState() // for users workout data
 
-  const [appTrainerData, setAppTrainerData] = useState() // for users workout data
+  const [appTrainerData, setAppTrainerData] = useState() // for trainer workout data
 
   const authObj = getAuth()
   onAuthStateChanged( authObj, (user) => {
+
     if(user) {
       setUser( user )
 
@@ -79,9 +81,11 @@ export default function App() {
     }
   })
 
+
   // Create account: Add email and password into firebase auth ---------
-  const register = (email, password) => {
+  const register = async (email, password) => {
     console.log("register: " + email, password)
+
     createUserWithEmailAndPassword(authObj, email, password)
       .then((userCredential) => {
         setUser(userCredential.user)
@@ -356,6 +360,7 @@ export default function App() {
   }
   // Sign Out to trainer screen -----------
   const signoutToTrainerScreen = () => {
+    setAppData("")
     signOut( authObj )
     .then( () => {
       // sign out successful
@@ -367,8 +372,60 @@ export default function App() {
     })
   }
 
+  const delUserAccount = (del) => {
+
+    const auth = getAuth();
+    const cUser = auth.currentUser;
+    console.log(cUser);
+
+    deleteUser(cUser).then(async() => {
+      // User deleted.
+      console.log("delete!!!");
+      await deleteDoc(doc(db, `user`, del));
+    }).catch((error) => {
+      // An error ocurred
+      console.log(error);
+    });
+  }
 
 
+  const [deleteTrainerId, setDeleteTrainerId] = useState('')
+  // Update trainer prof date in firebase ---------
+  const delTrainerAccount = async (del) => {
+
+    // Delete from trainer List
+    console.log("userId: " + del)
+    const updateDocRef = query( collection(db, "trainerList"), where("trainerListId", "==", del ))
+    const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
+      let FSdataTrainer = []
+      querySnapshot.forEach( (doc) => {
+          let itemTrainer = {}
+          itemTrainer = doc.data()
+          itemTrainer.id = doc.id
+          FSdataTrainer.push( itemTrainer )
+          console.log(doc.id);
+      })
+      setDeleteTrainerId(FSdataTrainer[0].id)
+    })
+    await deleteDoc(doc(db, `trainerList`, deleteTrainerId));
+    deleteFromAuth()
+  }
+  const deleteFromAuth = () => {
+    // Delete from auth
+    const auth = getAuth();
+    const cUser = auth.currentUser;
+    console.log("current user data ---------------------------------------------");
+    console.log(cUser);
+
+    deleteUser(cUser).then(async() => {
+      // User deleted.
+      signoutToTrainerScreen()
+      console.log("delete!!!");
+    }).catch((error) => {
+      // An error ocurred
+      console.log(error);
+    });
+  }
 
   return (
     <NavigationContainer>
@@ -410,6 +467,7 @@ export default function App() {
         <Stack.Screen name="UserHomeScreen" options={{
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
+          // headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />,
           headerRight: ( props ) => <DisplayAllButton/>,
           }}>
           { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }
@@ -460,7 +518,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-            { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} updateAccount={updateAccount} /> }
+            { ( props ) => <UserAccountScreen {...props} auth={user} data={appData} updateAccount={updateAccount} delUserAccount={delUserAccount} /> }
         </Stack.Screen>
 
         {/* ------------------------------------------------------------------------------------------------------------------- */}
@@ -495,6 +553,7 @@ export default function App() {
         <Stack.Screen name="TrainerHomeScreen" options={{
           headerTitle: "Trainer Home",
           headerTitleAlign: "center",
+          headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
           { ( props ) => <TrainerHomeScreen {...props} auth={trainer} data={appTrainerData} /> }
         </Stack.Screen>
@@ -511,7 +570,7 @@ export default function App() {
           headerTitleAlign: "center",
           headerRight: ( props ) => <SignoutButton {...props} signout={signout} />
           }}>
-            { ( props ) => <TrainerAccountScreen {...props} auth={trainer} data={appTrainerData} updateAccount={updateTrainerAccount} updateAccountTrainerList={updateAccountTrainerList}/> }
+            { ( props ) => <TrainerAccountScreen {...props} auth={trainer} data={appTrainerData} updateAccount={updateTrainerAccount} updateAccountTrainerList={updateAccountTrainerList} delTrainerAccount={delTrainerAccount} signout={signout}/> }
         </Stack.Screen>
 
       </Stack.Navigator>

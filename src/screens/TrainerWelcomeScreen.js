@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     },
     buttonLogin: {
         backgroundColor: COLORS.blue,
+        overflow: 'hidden',
     },
     buttonNewAccount: {
         borderWidth: 2,

@@ -1,8 +1,9 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput, Platform, KeyboardAvoidingView} from 'react-native'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native'
+import { useHeaderHeight } from '@react-navigation/elements'
 
 import SelectList from 'react-native-dropdown-select-list'
 
@@ -94,8 +95,19 @@ export default function TrainerAccountScreen( props ) {
 
     useEffect( () => {
         // console.log( props.data )
-        console.log( props.data[0].location )
+        // console.log( props.data[0].location )
     }, [props.data])
+
+    useEffect(() => {
+        if(!props.auth){
+            navigation.reset({index: 0, routes: [{ name: "WelcomeScreen" }]})
+        }
+        else {
+            console.log( "Trainer data ---------" )
+            // console.log( props.data[0].photo)
+        }
+
+    }, [props.auth])
 
     // Update user account -------------
     const updateAccount = (
@@ -132,66 +144,167 @@ export default function TrainerAccountScreen( props ) {
         props.updateAccountTrainerList( path, dataObj )
     }
 
-    return (
-        <ScrollView style={styles.container}>
-        <View style={styles.detailView}>
-            <View>
-                <Text>location</Text>
-                <SelectList boxStyles={[styles.name]} inputStyles={[FONTS.p2]} placeholder={renderLocation(locationSelected)} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
-            </View>
-            <View>
-                <Text>First name</Text>
-                <TextInput style={styles.name} onChangeText={ (value) => setFirstName(value) } >{ props.data[0].firstName }</TextInput>
-            </View>
-            <View>
-                <Text>Last name</Text>
-                <TextInput style={styles.name} onChangeText={ (value) => setLastName(value) } >{ props.data[0].lastName }</TextInput>
-            </View>
-            <View>
-                <Text>Phone number</Text>
-                <TextInput style={styles.name} onChangeText={ (value) => setPhone(value) } >{ props.data[0].phone }</TextInput>
-            </View>
-            <View>
-                <Text>Email</Text>
-                <Text style={styles.name} >{ props.data[0].email }</Text>
-            </View>
-            <View>
-                <Text>Password</Text>
-                <Text style={styles.name} >**********</Text>
-            </View>
-            <View style={styles.btnPosition}>
-                <TouchableOpacity onPress={ () => { updateAccount(
-                    `trainer/${props.auth.uid}/profile`,
-                    locationSelected, 
-                    firstName, 
-                    lastName,
-                    phone,
-                    ),
-                    updateAccountTrainerList(
-                        `trainerList`,
+    const delTrainerAccount = (del) => {
+        Alert.alert(
+            "DELETING REQUEST YOUR ACCOUNT",
+            "Your account will delete within 7 days",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                { 
+                    text: "OK", 
+                    onPress: () =>  clickAlert(del),
+                }
+            ]
+        )
+    }    
+    // When press okay through this function
+    const clickAlert = (del) => {
+        Alert.alert(
+            "Thank you",
+            "Hope we will see you again soon.",
+            [
+                { 
+                    text: "OK", 
+                    onPress: () =>  clickAlert2(del),
+                }
+            ]
+        )
+    }
+    const clickAlert2 = (del) => {
+        props.signout()
+        // props.delTrainerAccount( del )
+        // navigation.navigate('UserWorkoutListScreen', del )
+    }
+    
+    const height = useHeaderHeight()
+
+    if (Platform.OS === 'android') {
+        return (
+            <ScrollView style={styles.container}>
+            <View style={styles.detailView}>
+                <View>
+                    <Text>location</Text>
+                    <SelectList boxStyles={[styles.name]} inputStyles={[FONTS.p2]} placeholder={renderLocation(locationSelected)} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text>First name</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setFirstName(value) } >{ props.data[0].firstName }</TextInput>
+                </View>
+                <View>
+                    <Text>Last name</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setLastName(value) } >{ props.data[0].lastName }</TextInput>
+                </View>
+                <View>
+                    <Text>Phone number</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setPhone(value) } >{ props.data[0].phone }</TextInput>
+                </View>
+                <View>
+                    <Text>Email</Text>
+                    <Text style={styles.name2} >{ props.data[0].email }</Text>
+                </View>
+                <View>
+                    <Text>Password</Text>
+                    <Text style={styles.name2} >**********</Text>
+                </View>
+                <View style={styles.btnPosition}>
+                    <TouchableOpacity onPress={ () => { updateAccount(
+                        `trainer/${props.auth.uid}/profile`,
                         locationSelected, 
                         firstName, 
                         lastName,
                         phone,
-                    ) 
-                    }}>
-                    <Text style={styles.button}>Update</Text>
-                </TouchableOpacity>
+                        ),
+                        updateAccountTrainerList(
+                            `trainerList`,
+                            locationSelected, 
+                            firstName, 
+                            lastName,
+                            phone,
+                        ) 
+                        }}>
+                        <Text style={styles.button}>Update</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={ () => { delTrainerAccount(props.auth.uid) }}>
+                        <Text style={styles.deleteBtn}>delete account</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                <TouchableOpacity onPress={ () => { update() }}>
-                    <Text style={styles.deleteBtn}>delete account</Text>
-                </TouchableOpacity>
+            </ScrollView>
+        )
+    } else {
+        return (
+            <KeyboardAvoidingView 
+                style={styles.container}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={10}
+            >
+            <ScrollView style={styles.container}>
+            <View style={styles.detailView}>
+                <View>
+                    <Text>location</Text>
+                    <SelectList boxStyles={[styles.name]} inputStyles={[FONTS.p2]} placeholder={renderLocation(locationSelected)} setSelected={setLocationSelected} data={dataLocation} onChangeText={(selected) => setLocationSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text>First name</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setFirstName(value) } >{ props.data[0].firstName }</TextInput>
+                </View>
+                <View>
+                    <Text>Last name</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setLastName(value) } >{ props.data[0].lastName }</TextInput>
+                </View>
+                <View>
+                    <Text>Phone number</Text>
+                    <TextInput style={styles.name} onChangeText={ (value) => setPhone(value) } >{ props.data[0].phone }</TextInput>
+                </View>
+                <View>
+                    <Text>Email</Text>
+                    <Text style={styles.name2} >{ props.data[0].email }</Text>
+                </View>
+                <View>
+                    <Text>Password</Text>
+                    <Text style={styles.name2} >**********</Text>
+                </View>
+                <View style={styles.btnPosition}>
+                    <TouchableOpacity onPress={ () => { updateAccount(
+                        `trainer/${props.auth.uid}/profile`,
+                        locationSelected, 
+                        firstName, 
+                        lastName,
+                        phone,
+                        ),
+                        updateAccountTrainerList(
+                            `trainerList`,
+                            locationSelected, 
+                            firstName, 
+                            lastName,
+                            phone,
+                        ) 
+                        }}>
+                        <Text style={styles.button}>Update</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={ () => { delTrainerAccount(props.auth.uid) }}>
+                        <Text style={styles.deleteBtn}>delete account</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-        </ScrollView>
-    )
+            </ScrollView>
+            </KeyboardAvoidingView>
+        )
+    }
 }
 
 
 const styles = StyleSheet.create( {
     container: {
-        
+        flex: 1,
     },
     detailView: {
         flex: 1,
@@ -216,7 +329,15 @@ const styles = StyleSheet.create( {
         padding: SIZES.padding-5,
         marginTop: 10,
         marginBottom: 20,
-
+    },
+    name2: {
+        ...FONTS.p2,
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: SIZES.padding-5,
+        marginTop: 10,
+        marginBottom: 20,
+        opacity: 0.5,
     },
     icon: {
         marginRight: 6,

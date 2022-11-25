@@ -84,7 +84,7 @@ export default function UserSignupScreen( props ) {
                     <Text style={styles.label}>Email</Text>
                         <TextInput style={styles.input} onChangeText={ (value) => setEmail(value) }/>
 
-                    <Text style={styles.label}>Password (*It must more than 8 letters.)</Text>
+                    <Text style={styles.label}>Password (*Minimum 8 letters)</Text>
                         <TextInput style={styles.input} secureTextEntry={true} onChangeText={ (value) => setPassword(value) } />
                     
                     {/* Submit button */}

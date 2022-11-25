@@ -1,5 +1,5 @@
 import * as React from "react"
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput } from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput, KeyboardAvoidingView } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
@@ -374,6 +374,11 @@ export default function UserProfileScreen( props ) {
     const sheetRef = React.useRef(null);
 
     return (
+        <KeyboardAvoidingView 
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={10}
+        >
         <ScrollView style={styles.container}>
         <View style={styles.detailView}>
             <View>
@@ -432,7 +437,7 @@ export default function UserProfileScreen( props ) {
                     multiline={true}
                     textAlignVertical
                     numberOfLines={10}
-                    style={[styles.inputTextArea]}
+                    style={[styles.inputTextArea2]}
                     placeholder="Please write additional your information here."
                     onChangeText={ (value) => setDetails(value) }
                 >{props.data[0].details}</TextInput>
@@ -453,6 +458,7 @@ export default function UserProfileScreen( props ) {
             </View>
         </View>
         </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -536,6 +542,7 @@ const styles = StyleSheet.create( {
         padding: SIZES.padding,
         borderRadius: 10,
         textAlign: "center",
+        overflow: 'hidden',
     },
     inputTextArea: {
         ...FONTS.p2,
@@ -545,6 +552,16 @@ const styles = StyleSheet.create( {
         borderRadius: 6,
         marginBottom: 15,
         padding: 10,
+    },
+    inputTextArea2: {
+        ...FONTS.p2,
+        textAlignVertical: 'top',
+        borderColor: COLORS.orange,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        marginBottom: 15,
+        padding: 10,
+        height: 200,
     },
     photoUpdate: {
         // ...FONTS.p2,

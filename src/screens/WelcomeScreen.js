@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
         padding: SIZES.padding*2,
         margin: SIZES.padding,
         borderRadius: 10,
+        overflow: 'hidden',
     },
     buttonForUser: {
         backgroundColor: COLORS.orange,

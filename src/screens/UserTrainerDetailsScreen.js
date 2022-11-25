@@ -287,8 +287,9 @@ const styles = StyleSheet.create( {
         color: COLORS.white,
         backgroundColor: COLORS.orange,
         padding: SIZES.padding,
-        borderRadius: 10,
         textAlign: "center",
+        borderRadius: 10,
+        overflow: 'hidden',
     },
 });
 

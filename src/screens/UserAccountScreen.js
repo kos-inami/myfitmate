@@ -122,6 +122,29 @@ export default function UserAccountScreen( props ) {
 
         navigation.reset( {index: 0, routes: [{name: "UserSettingScreen"}]})
     }
+    
+    const deleteUserAccount = (del) => {
+        Alert.alert(
+            "DELETE YOUR ACCOUNT",
+            "Are you sure to delete your account?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                { 
+                    text: "OK", 
+                    onPress: () =>  clickAlert(del),
+                }
+            ]
+        )
+    }
+    // When press okay through this function
+    const clickAlert = (del) => {
+        props.delUserAccount( del )
+        // navigation.navigate('UserWorkoutListScreen', del )
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -144,11 +167,11 @@ export default function UserAccountScreen( props ) {
             </View>
             <View>
                 <Text>Email</Text>
-                <Text style={styles.name} >{ props.data[0].email }</Text>
+                <Text style={styles.name2} >{ props.data[0].email }</Text>
             </View>
             <View>
                 <Text>Password</Text>
-                <Text style={styles.name} >**********</Text>
+                <Text style={styles.name2} >**********</Text>
             </View>
             <View style={styles.btnPosition}>
                 <TouchableOpacity onPress={ () => { updateAccount(
@@ -162,7 +185,7 @@ export default function UserAccountScreen( props ) {
                 </TouchableOpacity>
             </View>
             <View>
-                <TouchableOpacity onPress={ () => { update() }}>
+                <TouchableOpacity onPress={ () => { deleteUserAccount(props.auth.uid) }}>
                     <Text style={styles.deleteBtn}>delete account</Text>
                 </TouchableOpacity>
             </View>
@@ -200,6 +223,15 @@ const styles = StyleSheet.create( {
         marginTop: 10,
         marginBottom: 20,
 
+    },
+    name2: {
+        ...FONTS.p2,
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: SIZES.padding-5,
+        marginTop: 10,
+        marginBottom: 20,
+        opacity: 0.5,
     },
     icon: {
         marginRight: 6,
@@ -252,6 +284,7 @@ const styles = StyleSheet.create( {
         padding: SIZES.padding,
         borderRadius: 10,
         textAlign: "center",
+        overflow: 'hidden',
     },
     deleteBtn: {
         opacity: 0.4,

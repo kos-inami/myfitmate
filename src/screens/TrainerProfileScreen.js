@@ -1,8 +1,9 @@
 import React from "react";
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput } from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Image, ImageBackground, Alert, TextInput, Platform, KeyboardAvoidingView } from 'react-native'
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native'
+import { useHeaderHeight } from '@react-navigation/elements'
 
 import SelectList from 'react-native-dropdown-select-list'
 import * as ImagePicker from 'expo-image-picker'
@@ -388,105 +389,183 @@ export default function TrainerProfileScreen( props ) {
     );
 
     const sheetRef = React.useRef(null);
+    const height = useHeaderHeight()
 
-
-    return (
-        <ScrollView style={styles.container}>
-        <View style={styles.detailView}>
-        <View>
-                <View style={styles.photoArea}>{ renderPhoto() }</View>
-                <TouchableOpacity onPress={ () => pickImage()}>
-                    <Text style={styles.photoUpdate}>Update profile photo</Text>
-                </TouchableOpacity>
+    if (Platform.OS === 'android') {
+        return (
+            <ScrollView style={styles.container}>
+            <View style={styles.detailView}>
+                <View>
+                    <View style={styles.photoArea}>{ renderPhoto() }</View>
+                    <TouchableOpacity onPress={ () => pickImage()}>
+                        <Text style={styles.photoUpdate}>Update profile photo</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
+                </View>
+                <View>
+                    <Text style={styles.textInTop} >{ renderLocation(props.data[0].location) }</Text>
+                </View>
+                <View style={{flexDirection:'row'}} >
+                    <Image source={ require('../../assets/iconPhone.png') } style={styles.icon} />
+                    <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].phone }</Text>
+                </View>
+                <View style={{flexDirection:'row'}} >
+                    <Image source={ require('../../assets/iconEmail.png') } style={styles.icon} />
+                    <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].email }</Text>
+                </View>
+                <View style={styles.border}></View>
+                <View>
+                    <Text style={styles.textBold} >Details</Text>
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Gender</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderGender(props.data[0].gender)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Age</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderAge(props.data[0].age)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Preference for the gender of the trainer</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderTrainFor(props.data[0].trainGender)} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Professional</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderPro(props.data[0].professional)} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Available Date</Text>
+                    <TextInput 
+                        style={[styles.inputTextArea]}
+                        onChangeText={ (value) => setAvailableDate(value) }
+                    >{availableDate}</TextInput>
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Additional details</Text>
+                    <TextInput
+                        multiline={true}
+                        textAlignVertical
+                        numberOfLines={10}
+                        style={[styles.inputTextArea]}
+                        placeholder="Please write additional your information here."
+                        onChangeText={ (value) => setDetails(value) }
+                    >{details}</TextInput>
+                </View>
+                <View style={styles.btnPosition}>
+                    <TouchableOpacity onPress={ () => { 
+                        updateProf(
+                            `trainer/${props.auth.uid}/profile`,
+                            genderSelected, 
+                            ageSelected, 
+                            trainGenderSelected,
+                            proSelected, 
+                            availableDate, 
+                            details,
+                            imageSet
+                        )
+                    }}>
+                        <Text style={styles.button}>Update</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
+            </ScrollView>
+        )
+    } else {
+        return (
+            <KeyboardAvoidingView 
+                style={styles.container}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={10}
+            >
+            <ScrollView style={styles.container}>
+            <View style={styles.detailView}>
+                <View>
+                    <View style={styles.photoArea}>{ renderPhoto() }</View>
+                    <TouchableOpacity onPress={ () => pickImage()}>
+                        <Text style={styles.photoUpdate}>Update profile photo</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <Text style={styles.name} >{ props.data[0].firstName + " " + props.data[0].lastName }</Text>
+                </View>
+                <View>
+                    <Text style={styles.textInTop} >{ renderLocation(props.data[0].location) }</Text>
+                </View>
+                <View style={{flexDirection:'row'}} >
+                    <Image source={ require('../../assets/iconPhone.png') } style={styles.icon} />
+                    <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].phone }</Text>
+                </View>
+                <View style={{flexDirection:'row'}} >
+                    <Image source={ require('../../assets/iconEmail.png') } style={styles.icon} />
+                    <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].email }</Text>
+                </View>
+                <View style={styles.border}></View>
+                <View>
+                    <Text style={styles.textBold} >Details</Text>
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Gender</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderGender(props.data[0].gender)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Age</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderAge(props.data[0].age)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Preference for the gender of the trainer</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderTrainFor(props.data[0].trainGender)} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Professional</Text>
+                    <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderPro(props.data[0].professional)} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Available Date</Text>
+                    <TextInput 
+                        style={[styles.inputTextArea]}
+                        onChangeText={ (value) => setAvailableDate(value) }
+                    >{availableDate}</TextInput>
+                </View>
+                <View>
+                    <Text style={styles.tableTitle}>Additional details</Text>
+                    <TextInput
+                        multiline={true}
+                        textAlignVertical
+                        numberOfLines={10}
+                        style={[styles.inputTextArea2]}
+                        placeholder="Please write additional your information here."
+                        onChangeText={ (value) => setDetails(value) }
+                    >{details}</TextInput>
+                </View>
+                <View style={styles.btnPosition}>
+                    <TouchableOpacity onPress={ () => { 
+                        updateProf(
+                            `trainer/${props.auth.uid}/profile`,
+                            genderSelected, 
+                            ageSelected, 
+                            trainGenderSelected,
+                            proSelected, 
+                            availableDate, 
+                            details,
+                            imageSet
+                        )
+                    }}>
+                        <Text style={styles.button}>Update</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                <Text style={styles.textInTop} >{ renderLocation(props.data[0].location) }</Text>
-            </View>
-            <View style={{flexDirection:'row'}} >
-                <Image source={ require('../../assets/iconPhone.png') } style={styles.icon} />
-                <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].phone }</Text>
-            </View>
-            <View style={{flexDirection:'row'}} >
-                <Image source={ require('../../assets/iconEmail.png') } style={styles.icon} />
-                <Text style={[ styles.textInTop, styles.limitLength ]} numberOfLines={1} >{ props.data[0].email }</Text>
-            </View>
-            <View style={styles.border}></View>
-            <View>
-                <Text style={styles.textBold} >Details</Text>
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Gender</Text>
-                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderGender(props.data[0].gender)} setSelected={setGenderSelected} data={dataGender} onChangeText={(selected) => setGenderSelected(selected)} search={false} />
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Age</Text>
-                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderAge(props.data[0].age)} setSelected={setAgeSelected} data={dataAge} onChangeText={(selected) => setAgeSelected(selected)} search={false} />
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Preference for the gender of the trainer</Text>
-                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderTrainFor(props.data[0].trainGender)} setSelected={setTrainGenderSelected} data={dataTrainGender} onChangeText={(selected) => setTrainGenderSelected(selected)} search={false} />
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Professional</Text>
-                <SelectList boxStyles={[styles.text]} inputStyles={{...FONTS.p2}} placeholder={renderPro(props.data[0].professional)} setSelected={setProSelected} data={dataPro} onChangeText={(selected) => setProSelected(selected)} search={false} />
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Available Date</Text>
-                <TextInput 
-                    style={[styles.inputTextArea]}
-                    onChangeText={ (value) => setAvailableDate(value) }
-                >{availableDate}</TextInput>
-            </View>
-            <View>
-                <Text style={styles.tableTitle}>Additional details</Text>
-                <TextInput
-                    multiline={true}
-                    textAlignVertical
-                    numberOfLines={10}
-                    style={[styles.inputTextArea]}
-                    placeholder="Please write additional your information here."
-                    onChangeText={ (value) => setDetails(value) }
-                >{details}</TextInput>
-            </View>
-            <View style={styles.btnPosition}>
-                <TouchableOpacity onPress={ () => { 
-                    updateProf(
-                        `trainer/${props.auth.uid}/profile`,
-                        genderSelected, 
-                        ageSelected, 
-                        trainGenderSelected,
-                        proSelected, 
-                        availableDate, 
-                        details,
-                        imageSet
-                    )
-                    // ,
-                    // updateProfList(
-                    //     `trainerList`,
-                    //     genderSelected, 
-                    //     ageSelected, 
-                    //     trainGenderSelected,
-                    //     proSelected, 
-                    //     availableDate, 
-                    //     details,
-                    //     imageSet
-                    // )
-                }}>
-                    <Text style={styles.button}>Update</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-        </ScrollView>
-    )
+            </ScrollView>
+            </KeyboardAvoidingView>
+        )
+    }
 }
 
 
 const styles = StyleSheet.create( {
     container: {
-        
+        flex: 1,
     },
     detailView: {
         flex: 1,
@@ -575,6 +654,16 @@ const styles = StyleSheet.create( {
         borderRadius: 6,
         marginBottom: 15,
         padding: 10,
+    },
+    inputTextArea2: {
+        ...FONTS.p2,
+        textAlignVertical: 'top',
+        borderColor: COLORS.blue,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        marginBottom: 15,
+        padding: 10,
+        height: 200,
     },
     photoUpdate: {
         // ...FONTS.p2,

@@ -114,7 +114,7 @@ export default function UserHomeScreen( props ) {
         //     setExist(1)
         // } else {
             // setExist(2)
-            console.log(props.data);
+            // console.log(props.data);
             // console.log(route);
             if (route.params) {
                 const { locationSelected, genderSelected, ageSelected, proSelected } = route.params
@@ -334,10 +334,11 @@ const styles = StyleSheet.create( {
         padding: 2,
     },
     listBlock: {
-        padding: 10,
+        marginTop: 10,
+        marginBottom: 15,
     },
     nameBlock: {
-        padding: 10,
+        padding: 15,
     },
     photoArea: {
         width: 100,
