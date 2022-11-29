@@ -87,12 +87,23 @@ export default function App() {
     console.log("register: " + email, password)
 
     createUserWithEmailAndPassword(authObj, email, password)
+    .then(() => {
+      authObj.sendEmailVerification({
+        handleCodeInApp: true,
+        url: 'myfitmate-5190c.firebaseapp.com',
+      })
+      .then(() => {
+        Alert.alert('Verification email sent')
+      }).catch((error) => {
+        Alert.alert(error)
+      })
       .then((userCredential) => {
         setUser(userCredential.user)
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log(error)
       })
+    })
+
   }
 
   // Create account: Add profile date into firebase ---------
@@ -467,7 +478,7 @@ export default function App() {
         <Stack.Screen name="UserHomeScreen" options={{
           headerTitle: "Search Trainer",
           headerTitleAlign: "center",
-          // headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />,
+          headerLeft: ( props ) => <SignoutButton {...props} signout={signout} />,
           headerRight: ( props ) => <DisplayAllButton/>,
           }}>
           { ( props ) => <UserHomeScreen {...props} auth={user} data={appData} signoutToTrainerScreen={signoutToTrainerScreen} /> }

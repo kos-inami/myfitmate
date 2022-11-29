@@ -257,6 +257,8 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     buttonDisabled: {
         backgroundColor: COLORS.gray,
