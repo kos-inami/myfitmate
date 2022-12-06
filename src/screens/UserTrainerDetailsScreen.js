@@ -195,7 +195,7 @@ export default function UserTrainerDetailsScreen( props ) {
             </View>
             <View style={styles.table}>
                 <Text style={styles.tableTitle}>Additional details</Text>
-                <Text style={styles.text} >{ details + details + details + details + details + details + details + details + details + details }</Text>
+                <Text style={styles.text} >{ details }</Text>
             </View>
             <View style={styles.bottomBtn}>
                 <View style={styles.btnPosition}>

@@ -143,7 +143,7 @@ export default function UserAccountScreen( props ) {
     // When press okay through this function
     const clickAlert = (del) => {
         props.delUserAccount( del )
-        // navigation.navigate('UserWorkoutListScreen', del )
+        navigation.navigate('UserSettingScreen', del )
     }
 
     return (

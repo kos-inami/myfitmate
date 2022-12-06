@@ -210,7 +210,7 @@ export default function TrainerSignupProfScreen( props ) {
                         multiline={true}
                         textAlignVertical
                         numberOfLines={10}
-                        style={styles.inputTextArea}
+                        style={styles.inputTextArea2}
                         placeholder="Please write additional your information here."
                         onChangeText={ (value) => setDetails(value) }
                     />
@@ -303,6 +303,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         padding: 10,
     },
+    inputTextArea2: {
+        textAlignVertical: 'top',
+        borderColor: COLORS.blue,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        marginBottom: 15,
+        padding: 10,
+        height: 200,
+    },
     form: {
         alignItems: 'flex-start',
     },
@@ -311,12 +320,16 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     buttonDisabled: {
         backgroundColor: COLORS.gray,
         padding: 10,
         marginTop: 10,
         marginBottom: 30,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     buttonText: {
         ...FONTS.p1,
