@@ -38,12 +38,12 @@ export default function TrainerHomeScreen( props ) {
                 FSdata.push( item )
             })
             setPhotoSet(FSdata[0].photo)
-            console.log(FSdata);
+            // console.log(FSdata);
         })
     }
 
     const renderPhoto = (pho) => {
-        console.log("photo = " + pho);
+        // console.log("photo = " + pho);
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
@@ -56,7 +56,7 @@ export default function TrainerHomeScreen( props ) {
 
     useEffect( () => {
         console.log( "Trainer data ---------" )
-        console.log( props.auth.uid)
+        // console.log( props.auth.uid)
     }, [props.data])
 
     useEffect(() => {

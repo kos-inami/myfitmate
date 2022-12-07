@@ -93,7 +93,7 @@ export default function UserAccountScreen( props ) {
     }
 
     useEffect( () => {
-        console.log( props.data )
+        // console.log( props.data )
     }, [props.data])
 
     

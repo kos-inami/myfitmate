@@ -34,12 +34,12 @@ export default function UserWorkoutListScreen( props ) {
 
     // Get data ----------
     useEffect( () => {
-        console.log( props.data )
+        // console.log( props.data )
     }, [props.data])
 
     // Pass data detail screen ----------
     const clickHandler = (data) => {
-        console.log(data);
+        // console.log(data);
         navigation.navigate('UserWorkoutDetailsScreen', data )
     }
     const renderItem = ({item}) => (    // Render to items 

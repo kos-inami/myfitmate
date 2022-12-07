@@ -72,7 +72,7 @@ export default function TrainerProfileScreen( props ) {
     const [imageUrl, setImageUrl] = useState('');
     // Each Items ----------
     const renderPhoto = () => {
-        console.log("photo url " + imageSet);
+        // console.log("photo url " + imageSet);
         if (imageSet == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
@@ -204,7 +204,7 @@ export default function TrainerProfileScreen( props ) {
         // console.log( props.data[0] )
         // console.log("auth data here ----------");
         // console.log( props.auth.uid )
-        console.log(props.data[0].id);
+        // console.log(props.data[0].id);
     }, [props.data])
 
     // update user profile ---------
@@ -350,7 +350,7 @@ export default function TrainerProfileScreen( props ) {
             quality: 1,
         });
     
-        console.log(result);
+        // console.log(result);
     
         if (!result.cancelled) {
             setImageSet(result.uri)

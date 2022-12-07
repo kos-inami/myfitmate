@@ -78,7 +78,7 @@ export default function UserProfileScreen( props ) {
     // Each Items ----------
     const renderPhoto = () => {
         // setImage(pho)
-        console.log("photo = " + image);
+        // console.log("photo = " + image);
         if (image == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" style={styles.photoSize} imageStyle={{ borderRadius: 10}}/>
         } else {
@@ -221,8 +221,8 @@ export default function UserProfileScreen( props ) {
     }
 
     useEffect( () => {
-        console.log( props.data )
-        console.log( props.data[0].photo )
+        // console.log( props.data )
+        // console.log( props.data[0].photo )
     }, [props.data])
 
     // update user profile ---------

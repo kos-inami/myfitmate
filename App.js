@@ -52,7 +52,7 @@ export default function App() {
     if(user) {
       setUser( user )
 
-      console.log("here in user Auth " + user.uid);
+      // console.log("here in user Auth " + user.uid);
       // when auth get data ---------
       if(!appData) {
         getData(`user/${user.uid}/profile`)
@@ -68,10 +68,10 @@ export default function App() {
     if(trainer) {
       setTrainer( trainer )
 
-      console.log("here in trainer Auth " + trainer.uid);
+      // console.log("here in trainer Auth " + trainer.uid);
       // when auth get data ---------
       if(!appTrainerData) {
-        console.log("hello");
+        // console.log("hello");
         getTrainerData(`trainer/${trainer.uid}/profile`)
       }
 
@@ -105,12 +105,11 @@ export default function App() {
     // })
 
   }
-
   // Create account: Add profile date into firebase ---------
   const addData = async (FScollection, data) => {
     // add data to a collection with FS generated id
     const ref = await addDoc( collection(db, FScollection), data )
-    console.log(ref.id);
+    // console.log(ref.id);
   }
 
   // Create account: Add profile date into firebase ---------
@@ -129,7 +128,7 @@ export default function App() {
   const signin = ( email, password ) => {
 
     // console.log("id: " + user.uid)
-    console.log("here in singin " + email);
+    // console.log("here in singin " + email);
 
     signInWithEmailAndPassword(authObj, email, password )
       .then(
@@ -174,7 +173,7 @@ export default function App() {
         item.id = doc.id
         FSdata.push( item )
       })
-      console.log(FSdata);
+      // console.log(FSdata);
       setAppTrainerData( FSdata )
     })
   }
@@ -183,7 +182,7 @@ export default function App() {
   const addWorkoutData = async (FScollection, data) => {
     // add data to a collection with FS generated id
     const ref = await addDoc( collection(db, FScollection), data )
-    console.log(ref.id);
+    // console.log(ref.id);
   }
   // Get user data to display ----------
   const getWorkoutData = ( FScollection ) => {
@@ -209,28 +208,28 @@ export default function App() {
 
   // User workout:  Update workout data in firebase ---------
   const updateNameData = async (upd, itemId) => {
-    console.log("updated:" + upd + " itemId: " + itemId)
+    // console.log("updated:" + upd + " itemId: " + itemId)
     const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
     await updateDoc(updateDocRef, {
       "name": upd
     })
   }
   const updateWeightData = async (upd, itemId) => {
-    console.log("updated:" + upd + " itemId: " + itemId)
+    // console.log("updated:" + upd + " itemId: " + itemId)
     const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
     await updateDoc(updateDocRef, {
       "weight": upd
     })
   }
   const updateRapData = async (upd, itemId) => {
-    console.log("updated:" + upd + " itemId: " + itemId)
+    // console.log("updated:" + upd + " itemId: " + itemId)
     const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
     await updateDoc(updateDocRef, {
       "rap": upd
     })
   }
   const updateDetailsData = async (upd, itemId) => {
-    console.log("updated:" + upd + " itemId: " + itemId)
+    // console.log("updated:" + upd + " itemId: " + itemId)
     const updateDocRef = doc(db, `user/${user.uid}/workout`, itemId)
     await updateDoc(updateDocRef, {
       "details": upd
@@ -239,8 +238,8 @@ export default function App() {
 
   // Update user prof date in firebase ---------
   const updateUserProf = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemPhotoURL: " + data.photo)
-    console.log(data)
+    // console.log("path:" + FScollection + " itemPhotoURL: " + data.photo)
+    // console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "genderSelected": data.genderSelected, 
@@ -254,8 +253,8 @@ export default function App() {
   }
   // Update user account date in firebase ---------
   const updateAccount = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
-    console.log(data)
+    // console.log("path:" + FScollection + " itemId: " + data.id)
+    // console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "locationSelected": data.locationSelected, 
@@ -267,9 +266,9 @@ export default function App() {
 
   // Update trainer prof date in firebase ---------
   const updateTrainerProf = async (FScollection, data) => {
-    console.log("Prof -------------------------------------------------------------------------------------------------------------------");
-    console.log("Prof path:" + FScollection + " itemId: " + data.id)
-    console.log(data)
+    // console.log("Prof -------------------------------------------------------------------------------------------------------------------");
+    // console.log("Prof path:" + FScollection + " itemId: " + data.id)
+    // console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "gender": data.gender, 
@@ -286,8 +285,8 @@ export default function App() {
   const [FSdataForTrainerList, setFSdataForTrainerList] = useState('')
   // Update trainer prof date in firebase ---------
   const updateTrainerProfList = async (FScollectionList, data) => {
-    console.log("List path -------------------------------------------------------------------------------------------------------------------");
-    console.log("List path:" + FScollectionList + " itemId: " + data.id)
+    // console.log("List path ---------------------------------------------------------------------------------------------------------------");
+    // console.log("List path:" + FScollectionList + " itemId: " + data.id)
 
     const updateDocRef = query( collection(db, FScollectionList), where("trainerListId", "==", data.id ))
     const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
@@ -298,7 +297,7 @@ export default function App() {
           itemTrainer.id = doc.id
           FSdata.push( itemTrainer )
       })
-      console.log("list ID ========================== " + FSdata[0].id);
+      // console.log("list ID ========================== " + FSdata[0].id);
       setTrainerListId(FSdata[0].id);
 
       const updateTrainerDoc = doc(db, FScollectionList, FSdata[0].id)
@@ -317,8 +316,8 @@ export default function App() {
 
   // Update trainer account date in firebase ---------
   const updateTrainerAccount = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
-    console.log(data)
+    // console.log("path:" + FScollection + " itemId: " + data.id)
+    // console.log(data)
     const updateDocRef = doc(db, FScollection, data.id)
     await updateDoc(updateDocRef, {
       "location": data.location, 
@@ -329,8 +328,8 @@ export default function App() {
   }
   // Update trainer prof date in firebase ---------
   const updateAccountTrainerList = async (FScollection, data) => {
-    console.log("path:" + FScollection + " itemId: " + data.id)
-    console.log(data)
+    // console.log("path:" + FScollection + " itemId: " + data.id)
+    // console.log(data)
     const updateDocRef = query( collection(db, FScollection), where("trainerListId", "==", data.id ))
     const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
       let FSdataTrainer = []
@@ -340,11 +339,11 @@ export default function App() {
           itemTrainer.id = doc.id
           FSdataTrainer.push( itemTrainer )
       })
-      console.log("data here ----------");
-      console.log(FSdataTrainer[0].id);
+      // console.log("data here ----------");
+      // console.log(FSdataTrainer[0].id);
       // setTrainerListId(FSdataTrainer[0].id);
   })  
-    console.log(trainerListId, data.location, data.firstName, data.lastName, data.phone);
+    // console.log(trainerListId, data.location, data.firstName, data.lastName, data.phone);
     const updateTrainerDoc = doc(db, FScollection, trainerListId)
     await updateDoc(updateTrainerDoc, {
       "location": data.location, 
@@ -387,7 +386,7 @@ export default function App() {
 
     const auth = getAuth();
     const cUser = auth.currentUser;
-    console.log(cUser);
+    // console.log(cUser);
 
     deleteUser(cUser).then(async() => {
       // User deleted.
@@ -405,7 +404,7 @@ export default function App() {
   const delTrainerAccount = async (del) => {
 
     // Delete from trainer List
-    console.log("userId: " + del)
+    // console.log("userId: " + del)
     const updateDocRef = query( collection(db, "trainerList"), where("trainerListId", "==", del ))
     const unsubscribe = onSnapshot(updateDocRef, (querySnapshot) => {
       let FSdataTrainer = []
@@ -414,7 +413,7 @@ export default function App() {
           itemTrainer = doc.data()
           itemTrainer.id = doc.id
           FSdataTrainer.push( itemTrainer )
-          console.log(doc.id);
+          // console.log(doc.id);
       })
       setDeleteTrainerId(FSdataTrainer[0].id)
     })
@@ -425,8 +424,8 @@ export default function App() {
     // Delete from auth
     const auth = getAuth();
     const cUser = auth.currentUser;
-    console.log("current user data ---------------------------------------------");
-    console.log(cUser);
+    // console.log("current user data ---------------------------------------------");
+    // console.log(cUser);
 
     deleteUser(cUser).then(async() => {
       // User deleted.

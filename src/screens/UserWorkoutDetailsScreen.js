@@ -86,7 +86,7 @@ export default function UserWorkoutDetailsScreen( props ) {
 
     // For update
     const updateName = (updateVal) => {
-        console.log('updating... ' + updateVal + " where " + id )
+        // console.log('updating... ' + updateVal + " where " + id )
         setNameSet(updateVal)
         props.updateName( updateVal, id )
         popupRef.close()

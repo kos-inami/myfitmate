@@ -17,7 +17,7 @@ export default function UserSetting( props ) {
     const [photo, setPhoto] = useState('')
 
     const renderPhoto = (pho) => {
-        console.log("photo = " + pho);
+        // console.log("photo = " + pho);
         if (pho == "") {
             return <ImageBackground source={ require('../../assets/photoNone.png') } resizeMode="cover" imageStyle={{ borderRadius: 10}} style={styles.photoSize} />
         } else {
@@ -26,7 +26,7 @@ export default function UserSetting( props ) {
     }
 
     useEffect( () => {
-        console.log( props.data )
+        // console.log( props.data )
         setPhoto(props.data[0].photo)
     }, [props.data])
 

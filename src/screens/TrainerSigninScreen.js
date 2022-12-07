@@ -67,8 +67,8 @@ export default function TrainerSigninScreen( props ) {
     }, [email, password])
 
     useEffect (() => {
-        console.log("here");
-        console.log(email);
+        // console.log("here");
+        // console.log(email);
         if (props.auth) {
             navigation.reset( {index: 0, routes: [{name: "TrainerHomeScreen"}]})
         }
