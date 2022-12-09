@@ -1,4 +1,4 @@
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView } from 'react-native'
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, KeyboardAvoidingView, StatusBar, ScrollView, SafeAreaView, Alert } from 'react-native'
 import { React, useState, useEffect } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
@@ -68,12 +68,16 @@ export default function UserSearchScreen( props ) {
         ageSelected,
         proSelected
     ) => {
-        navigation.navigate("UserHomeScreen",  {
-            locationSelected, 
-            genderSelected, 
-            ageSelected,
-            proSelected
-        })
+        if(locationSelected == '' || genderSelected == '') {
+            Alert.alert("Please fill in at the least Location and Professional for.")
+        } else {
+            navigation.navigate("UserHomeScreen",  {
+                locationSelected, 
+                genderSelected, 
+                ageSelected,
+                proSelected
+            })
+        }
     }
 
     return (

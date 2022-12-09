@@ -101,6 +101,7 @@ export default function App() {
         setUser(userCredential.user)
       }).catch((error) => {
         console.log(error)
+        Alert.alert("This email is already registered. Please go to the login form to login.")
       })
     // })
 

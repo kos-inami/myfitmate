@@ -42,7 +42,7 @@ export default function UserWorkoutListScreen( props ) {
         // console.log(data);
         navigation.navigate('UserWorkoutDetailsScreen', data )
     }
-    const renderItem = ({item}) => (    // Render to items 
+    const renderItem = ({item}) => (    // Render to items
         <View style={styles.taskListBlockShadow}>
             <View style={styles.taskListBlock}>
                 <Text style={styles.taskListText} onPress={ () => clickHandler(item) }>
@@ -50,11 +50,8 @@ export default function UserWorkoutListScreen( props ) {
                 </Text>
                 <FontAwesome name="angle-right" style={styles.listArrow}/>
             </View>
-            {/* <View style={styles.borderBottom}></View> */}
         </View>
     )
-
-
 
     const height = useHeaderHeight()
 
@@ -64,7 +61,7 @@ export default function UserWorkoutListScreen( props ) {
                 <View style={{padding: SIZES.padding}}>
                     <FlatList 
                         data={ props.data } 
-                        renderItem= {renderItem}
+                        renderItem= { renderItem }
                         keyExtractor={ item => item.id }
                     />
                 </View>
@@ -107,7 +104,6 @@ export default function UserWorkoutListScreen( props ) {
             </View>
         )
     } else {
-        
         return (
             <View style={styles.homeView}>
                 <View style={{padding: SIZES.padding}}>
